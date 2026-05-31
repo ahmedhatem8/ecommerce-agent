@@ -4,7 +4,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-from rag import get_rag_chain
+from rag import get_hybrid_chain
 
 load_dotenv()
 
@@ -37,7 +37,7 @@ eval_data = [
      "ground_truth": "Electronics carry a 1-year manufacturer warranty."},
 ]
 
-chain, retriever = get_rag_chain()
+chain, retriever = get_hybrid_chain()
 
 faithfulness_scores = []
 relevancy_scores = []
@@ -46,8 +46,7 @@ precision_scores = []
 for item in eval_data:
     question = item["question"]
     ground_truth = item["ground_truth"]
-    answer = chain.invoke(question)
-    sources = retriever.invoke(question)
+    answer, sources = chain(question)
     context = " ".join([doc.page_content for doc in sources])
 
     f_prompt = f"""Rate from 0 to 1 how faithful this answer is to the context.
@@ -82,9 +81,9 @@ Ground truth: {ground_truth}"""
     print(f"   Faithfulness: {f_score} | Relevancy: {r_score} | Precision: {p_score}\n")
 
 print("=" * 50)
-print("NAIVE RAG BASELINE SCORES")
+print("HYBRID RAG SCORES")
 print("=" * 50)
 print(f"Faithfulness:      {sum(faithfulness_scores)/len(faithfulness_scores):.3f}")
 print(f"Answer relevancy:  {sum(relevancy_scores)/len(relevancy_scores):.3f}")
 print(f"Context precision: {sum(precision_scores)/len(precision_scores):.3f}")
-print("\nSave these numbers for your report.")
+print("Naive RAG:  F=0.925 | AR=1.000 | CP=0.967")

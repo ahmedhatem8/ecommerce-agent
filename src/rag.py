@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-
+from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -8,6 +8,7 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
+from rank_bm25 import BM25Okapi
 
 load_dotenv()
 
@@ -15,7 +16,6 @@ CHROMA_PATH = "knowledge_base/chroma_db"
 POLICIES_DIR = "data/policies"
 
 def load_documents():
-    from langchain_core.documents import Document
     docs = []
     for fname in os.listdir(POLICIES_DIR):
         if fname.endswith(".md"):
@@ -31,12 +31,10 @@ def get_embeddings():
 def build_vectorstore():
     print("Loading documents...")
     docs = load_documents()
-
     print("Splitting into chunks...")
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     chunks = splitter.split_documents(docs)
     print(f"Created {len(chunks)} chunks.")
-
     print("Embedding and storing in ChromaDB...")
     vectorstore = Chroma.from_documents(
         chunks,
@@ -55,7 +53,49 @@ def load_vectorstore():
 def get_rag_chain():
     retriever = load_vectorstore().as_retriever(search_kwargs={"k": 3})
     llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
+    prompt = ChatPromptTemplate.from_template("""
+You are a helpful customer support agent for NovaMart.
+Answer the question based only on the context below.
 
+Context: {context}
+
+Question: {question}
+""")
+    chain = (
+        {"context": retriever, "question": RunnablePassthrough()}
+        | prompt
+        | llm
+        | StrOutputParser()
+    )
+    return chain, retriever
+
+def get_hybrid_chain():
+    documents = load_documents()
+    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+    chunks = splitter.split_documents(documents)
+
+    tokenized = [chunk.page_content.lower().split() for chunk in chunks]
+    bm25 = BM25Okapi(tokenized)
+
+    vectorstore = load_vectorstore()
+    dense_retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+
+    def hybrid_retrieve(query):
+        dense_results = dense_retriever.invoke(query)
+        tokenized_query = query.lower().split()
+        bm25_scores = bm25.get_scores(tokenized_query)
+        top_bm25_indices = sorted(range(len(bm25_scores)),
+                                  key=lambda i: bm25_scores[i], reverse=True)[:3]
+        bm25_results = [chunks[i] for i in top_bm25_indices]
+        seen = set()
+        combined = []
+        for doc in dense_results + bm25_results:
+            if doc.page_content not in seen:
+                seen.add(doc.page_content)
+                combined.append(doc)
+        return combined[:4]
+
+    llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
     prompt = ChatPromptTemplate.from_template("""
 You are a helpful customer support agent for NovaMart.
 Answer the question based only on the context below.
@@ -65,22 +105,23 @@ Context: {context}
 Question: {question}
 """)
 
-    chain = (
-        {"context": retriever, "question": RunnablePassthrough()}
-        | prompt
-        | llm
-        | StrOutputParser()
-    )
-    return chain, retriever
+    def hybrid_chain(query):
+        docs = hybrid_retrieve(query)
+        context = "\n\n".join([d.page_content for d in docs])
+        response = (prompt | llm | StrOutputParser()).invoke({
+            "context": context,
+            "question": query
+        })
+        return response, docs
+
+    return hybrid_chain, hybrid_retrieve
 
 if __name__ == "__main__":
     build_vectorstore()
-
     chain, retriever = get_rag_chain()
     question = "What is the return window for items?"
     answer = chain.invoke(question)
     sources = retriever.invoke(question)
-
     print("\n--- Answer ---")
     print(answer)
     print("\n--- Sources used ---")
