@@ -10,6 +10,16 @@ def load_orders():
     with open("data/orders.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
+def _profile_context(state) -> str:
+    p = state.get("customer_profile", {})
+    if not p:
+        return ""
+    return f"""Customer profile:
+Name: {p.get('customer_name', 'Unknown')}
+Email: {p.get('email', 'Unknown')}
+Customer ID: {p.get('customer_id', 'Unknown')}
+"""
+
 def order_lookup_agent(state):
     messages = state["messages"]
     last_msg = messages[-1]["content"]
@@ -40,19 +50,27 @@ Estimated delivery: {order.get('estimated_delivery', 'N/A')}
 Total: ${order['total_price']}
 """
 
+    history = "\n".join(
+        f"{'Customer' if m['role'] == 'user' else 'Agent'}: {m['content']}"
+        for m in messages[:-1]
+    )
     prompt = f"""You are a helpful customer support agent for NovaMart.
 Use the order information below to answer the customer's question.
-Be friendly and concise.
+Be friendly and concise. Remember everything the customer said earlier in this conversation.
 
+{_profile_context(state)}
 Order info:
 {context}
+
+Conversation so far:
+{history}
 
 Customer message: {last_msg}
 """
     response = llm.invoke(prompt)
     return {
         "response": response.content,
-        "messages": messages + [{"role": "assistant", "content": response.content}]
+        "messages": [{"role": "assistant", "content": response.content}]
     }
 
 
@@ -67,13 +85,18 @@ def policy_agent(state):
     response = f"{answer}"
     return {
         "response": response,
-        "messages": messages + [{"role": "assistant", "content": response}]
+        "messages": [{"role": "assistant", "content": response}]
     }
 
 def escalation_agent(state):
     messages = state["messages"]
     last_msg = messages[-1]["content"]
+    p = state.get("customer_profile", {})
 
+    history = "\n".join(
+        f"{'Customer' if m['role'] == 'user' else 'Agent'}: {m['content']}"
+        for m in messages[:-1]
+    )
     prompt = f"""You are a customer support escalation agent for NovaMart.
 A customer has a complaint or issue that needs human attention.
 Write a short, structured handoff summary for the human agent who will handle this.
@@ -81,30 +104,55 @@ Write a short, structured handoff summary for the human agent who will handle th
 Format your response exactly like this:
 ESCALATION SUMMARY
 ------------------
-Customer ID: {state.get('customer_id', 'Unknown')}
+Customer ID: {p.get('customer_id', state.get('customer_id', 'Unknown'))}
+Customer Name: {p.get('customer_name', 'Unknown')}
+Email: {p.get('email', 'Unknown')}
 Issue: [one sentence description]
 Urgency: [Low / Medium / High]
 Recommended action: [what the human agent should do]
 Customer message: "{last_msg}"
+
+Conversation so far:
+{history}
 """
     response = llm.invoke(prompt)
     return {
         "response": response.content,
         "escalate": True,
-        "messages": messages + [{"role": "assistant", "content": response.content}]
+        "messages": [{"role": "assistant", "content": response.content}]
     }
 
 def chitchat_agent(state):
+    from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
     chat_llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.7)
-    last_msg = state["messages"][-1]["content"]
-    prompt = f"""You are a friendly customer support agent for NovaMart, an online store.
-Respond naturally to the customer's message. Keep it short and warm.
-If they seem to need help, let them know you can assist with orders, returns, and shipping.
-Customer: {last_msg}
-"""
-    response = chat_llm.invoke(prompt)
+    messages = state["messages"]
+    p = state.get("customer_profile", {})
+
+    profile_note = ""
+    if p.get("customer_name"):
+        profile_note = (
+            f"The customer's name is {p['customer_name']}, "
+            f"email is {p['email']}, "
+            f"customer ID is {p['customer_id']}. "
+            "Use this information naturally if asked about their details."
+        )
+
+    lc_messages = [SystemMessage(content=(
+        "You are a friendly customer support agent for NovaMart, an online store. "
+        "Respond naturally to the customer's message. Keep it short and warm. "
+        "Remember everything the customer has told you in this conversation. "
+        "If they seem to need help, let them know you can assist with orders, returns, and shipping. "
+        + profile_note
+    ))]
+    for m in messages:
+        if m["role"] == "user":
+            lc_messages.append(HumanMessage(content=m["content"]))
+        elif m["role"] == "assistant":
+            lc_messages.append(AIMessage(content=m["content"]))
+
+    response = chat_llm.invoke(lc_messages)
     return {
         "response": response.content,
-        "messages": state["messages"] + [{"role": "assistant", "content": response.content}]
+        "messages": [{"role": "assistant", "content": response.content}]
     }
 

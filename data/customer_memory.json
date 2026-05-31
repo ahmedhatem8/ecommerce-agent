@@ -1,8 +1,0 @@
-{
-  "CUST-101": {
-    "last_intent": "chitchat",
-    "last_message": "Hi there. How can I help you today? Do you have any questions about an order, or maybe need help with something else?",
-    "escalated": false,
-    "total_sessions": 9
-  }
-}

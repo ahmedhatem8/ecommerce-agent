@@ -12,6 +12,7 @@ load_dotenv()
 class AgentState(TypedDict):
     messages: Annotated[List[dict], operator.add]
     customer_id: str
+    customer_profile: dict   # name, email, and order data loaded at session start
     intent: str
     order_id: str
     response: str
@@ -97,18 +98,67 @@ def build_graph():
     g.add_edge("chitchat",     END)
     return g.compile()
 
+def lookup_customer_by_order(order_id: str) -> dict:
+    import json
+    with open("data/orders.json", "r", encoding="utf-8") as f:
+        orders = json.load(f)
+    order = next((o for o in orders if o["order_id"].upper() == order_id.upper()), None)
+    if not order:
+        return {}
+    return {
+        "customer_id": order["customer_id"],
+        "customer_name": order["customer_name"],
+        "email": order["email"],
+        "order_id": order["order_id"],
+        "item": order["item"],
+        "status": order["status"],
+        "order_date": order["order_date"],
+        "estimated_delivery": order.get("estimated_delivery", "N/A"),
+        "total_price": order["total_price"],
+    }
+
 if __name__ == "__main__":
     graph = build_graph()
+
+    order_id_input = input("Enter your order ID (e.g. ORD-1001): ").strip().upper()
+    profile = lookup_customer_by_order(order_id_input)
+
+    if not profile:
+        print(f"No order found for {order_id_input}. Starting as anonymous session.\n")
+        customer_id = ""
+        greeting = "Hi there! How can I help you today?"
+    else:
+        customer_id = profile["customer_id"]
+        greeting = f"Hi {profile['customer_name']}! How can I help you today?"
+
+    print(f"Bot: {greeting}\n")
+
     state = {
-        "messages": [{"role": "user", "content": "hi"}],
-        "customer_id": "CUST-101",
+        "messages": [{"role": "assistant", "content": greeting}],
+        "customer_id": customer_id,
+        "customer_profile": profile,
         "intent": "",
-        "order_id": "",
-        "response": "",
+        "order_id": profile.get("order_id", ""),
+        "response": greeting,
         "escalate": False,
         "guardrail_triggered": False,
     }
-    result = graph.invoke(state)
-    update_memory_after_session(result)
-    print("Intent detected:", result["intent"])
-    print("Response:", result["response"])
+
+    while True:
+        user_input = input("You: ").strip()
+        if user_input.lower() in ("done", "stop"):
+            update_memory_after_session(state)
+            print("Session ended.")
+            break
+
+        state["messages"] = state["messages"] + [{"role": "user", "content": user_input}]
+        state["guardrail_triggered"] = False
+
+        result = graph.invoke(state)
+
+        print(f"Bot: {result['response']}\n")
+
+        state["messages"] = result["messages"] + [{"role": "assistant", "content": result["response"]}]
+        state["intent"] = result["intent"]
+        state["order_id"] = result.get("order_id", "")
+        state["escalate"] = result.get("escalate", False)
