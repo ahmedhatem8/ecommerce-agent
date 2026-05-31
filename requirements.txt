@@ -1,0 +1,11 @@
+langgraph
+langchain
+langchain-groq
+langchain-community
+chromadb
+sentence-transformers
+ragas
+faker
+python-dotenv
+rank-bm25
+datasets
