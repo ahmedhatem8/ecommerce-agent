@@ -93,3 +93,18 @@ Customer message: "{last_msg}"
         "escalate": True,
         "messages": messages + [{"role": "assistant", "content": response.content}]
     }
+
+def chitchat_agent(state):
+    chat_llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.7)
+    last_msg = state["messages"][-1]["content"]
+    prompt = f"""You are a friendly customer support agent for NovaMart, an online store.
+Respond naturally to the customer's message. Keep it short and warm.
+If they seem to need help, let them know you can assist with orders, returns, and shipping.
+Customer: {last_msg}
+"""
+    response = chat_llm.invoke(prompt)
+    return {
+        "response": response.content,
+        "messages": state["messages"] + [{"role": "assistant", "content": response.content}]
+    }
+
