@@ -1,8 +1,7 @@
-langgraph
-langchain
 langchain-groq
-langchain-community
-chromadb
+langchain-chroma
+langchain-huggingface
+langchain-text-splitters
 sentence-transformers
 ragas
 faker
