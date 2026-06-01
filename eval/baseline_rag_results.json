@@ -1,0 +1,252 @@
+{
+  "run_name": "Baseline RAG (Dense Retrieval Only)",
+  "timestamp": "2026-06-01T20:03:33.688336",
+  "summary": {
+    "faithfulness": 0.74,
+    "answer_relevancy": 0.845,
+    "context_precision": 0.755,
+    "total_questions": 20
+  },
+  "by_difficulty": {
+    "medium": {
+      "n": 5,
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0
+    },
+    "hard": {
+      "n": 8,
+      "faithfulness": 0.65,
+      "answer_relevancy": 0.825,
+      "context_precision": 0.637
+    },
+    "very_hard": {
+      "n": 7,
+      "faithfulness": 0.657,
+      "answer_relevancy": 0.757,
+      "context_precision": 0.714
+    }
+  },
+  "tests": [
+    {
+      "id": "RQ-01",
+      "difficulty": "medium",
+      "topic": "returns",
+      "question": "What is the return window for items at NovaMart?",
+      "ground_truth": "Items may be returned within 30 days of delivery.",
+      "answer": "The return window for items at NovaMart is 30 days from the date of delivery.",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0
+    },
+    {
+      "id": "RQ-02",
+      "difficulty": "medium",
+      "topic": "shipping",
+      "question": "How long does standard shipping take and how much does it cost for orders below $50?",
+      "ground_truth": "Standard shipping takes 5 to 7 business days and costs $4.99 for orders below $50.",
+      "answer": "For standard shipping, the delivery time is 5-7 business days. The standard shipping fee for orders below $50 is $4.99. However, if your order is above $50, you will receive free standard shipping.",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0
+    },
+    {
+      "id": "RQ-03",
+      "difficulty": "medium",
+      "topic": "products",
+      "question": "What warranty does the Wireless Headphones come with?",
+      "ground_truth": "The Wireless Headphones carry a 1-year manufacturer warranty.",
+      "answer": "The Wireless Headphones come with a 1-year manufacturer warranty.",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0
+    },
+    {
+      "id": "RQ-04",
+      "difficulty": "medium",
+      "topic": "shipping",
+      "question": "How much does express shipping cost and how fast is it?",
+      "ground_truth": "Express shipping costs $12.99 and takes 2 to 3 business days.",
+      "answer": "The express shipping fee is $12.99, and it takes 2-3 business days for delivery.",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0
+    },
+    {
+      "id": "RQ-05",
+      "difficulty": "medium",
+      "topic": "products",
+      "question": "Is the 27-inch Monitor currently in stock and what is its price?",
+      "ground_truth": "Yes, the Monitor 27 inch is in stock at a price of $299.99.",
+      "answer": "Yes, the 27-inch Monitor is currently in stock. The price of the 27-inch Monitor is $299.99, which is a discounted price from its original price of $369.00.",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0
+    },
+    {
+      "id": "RQ-06",
+      "difficulty": "hard",
+      "topic": "returns",
+      "question": "My refund amount is exactly $100. Will it be processed automatically or does it need supervisor approval?",
+      "ground_truth": "Refunds between $100 and $300 require supervisor approval. An exact $100 refund falls in that range and must be escalated.",
+      "answer": "According to our return policy, refunds under $100 are processed automatically by our support agent. Since your refund amount is exactly $100, it falls into the category of refunds between $100 and $300, which require supervisor approval. Therefore, your refund will require supervisor approval, also known as escalation.",
+      "faithfulness": 0.8,
+      "answer_relevancy": 1.0,
+      "context_precision": 0.9
+    },
+    {
+      "id": "RQ-07",
+      "difficulty": "hard",
+      "topic": "returns",
+      "question": "I received the wrong item 40 days after delivery. Can I still get a refund even though the 30-day window has passed?",
+      "ground_truth": "Yes. Wrong item exceptions grant a full refund or replacement with no return needed. The 30-day window does not apply.",
+      "answer": "I'm happy to help you with your concern. According to our return policy, items may be returned within 30 days of delivery. Since you received the wrong item 40 days after delivery, you are outside of the eligible return window. Unfortunately, this means you do not qualify for a refund based on our standard return policy. However, I'd be happy to discuss possible alternatives or exceptions with you. Could you please provide more details about your order and the issue you're experiencing?",
+      "faithfulness": 0.0,
+      "answer_relevancy": 0.8,
+      "context_precision": 0.0
+    },
+    {
+      "id": "RQ-08",
+      "difficulty": "hard",
+      "topic": "shipping",
+      "question": "My package arrived exactly 2 days past the estimated delivery date. Do I qualify for the $5 store credit?",
+      "ground_truth": "No. The $5 store credit is only issued automatically for delays over 3 days. Two days does not qualify.",
+      "answer": "According to our shipping policy, a $5 store credit is issued automatically for delays over 3 days. Since your package arrived exactly 2 days past the estimated delivery date, you do not qualify for the $5 store credit.",
+      "faithfulness": 0.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 0.8
+    },
+    {
+      "id": "RQ-09",
+      "difficulty": "hard",
+      "topic": "products",
+      "question": "I purchased both the Monitor 27 inch and the Phone Case. What is the warranty period for each?",
+      "ground_truth": "The Monitor 27 inch has a 1-year manufacturer warranty. The Phone Case has a 90-day warranty.",
+      "answer": "For the Monitor 27\", it's an electronic product, so it carries a **1-year manufacturer warranty**. \n\nFor the Phone Case, it's a non-electronic accessory, so it carries a **90-day warranty**.",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0
+    },
+    {
+      "id": "RQ-10",
+      "difficulty": "hard",
+      "topic": "shipping",
+      "question": "Can I get same-day delivery if I live in Alexandria, Egypt?",
+      "ground_truth": "No. Same-day delivery is only available in Cairo for orders placed before 12 PM.",
+      "answer": "No, same-day delivery is only available in Cairo for orders placed before 12 PM. If you live in Alexandria, Egypt, you will not be eligible for same-day delivery.",
+      "faithfulness": 0.8,
+      "answer_relevancy": 1.0,
+      "context_precision": 0.8
+    },
+    {
+      "id": "RQ-11",
+      "difficulty": "hard",
+      "topic": "returns",
+      "question": "After I receive the return shipping label, how many days do I have to actually ship the item back?",
+      "ground_truth": "You must ship the item back within 7 days of receiving the return label.",
+      "answer": "You have 7 days to ship the item back after receiving the return shipping label.",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0
+    },
+    {
+      "id": "RQ-12",
+      "difficulty": "hard",
+      "topic": "products",
+      "question": "wat is da return window 4 da headphones n exactly how do i start da return process",
+      "ground_truth": "The return window is 30 days from delivery. Contact support with your order ID to receive a return label within 24 hours, then ship back within 7 days.",
+      "answer": "To start the return process for your headphones, you'll need to contact our support team with your order ID. Once you've done that, we'll email you a return shipping label within 24 hours. You'll then have 7 days to ship the item back to us. After we receive the return, we'll issue a refund within 5 business days.\n\nSo, to summarize: \n\n1. Contact support with your order ID.\n2. Receive a return shipping label by email within 24 hours.\n3. Ship the item back within 7 days of receiving the label.\n4. Refund is issued within 5 business days of receiving the return.\n\nIf your headphones are damaged or if we sent the wrong item, you might not need to return them. In those cases, you can get a full refund or replacement without having to send the item back, as long as you provide photo evidence for damaged items.",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8,
+      "context_precision": 0.6
+    },
+    {
+      "id": "RQ-13",
+      "difficulty": "hard",
+      "topic": "returns",
+      "question": "How many business days does it take to receive my refund after NovaMart gets the returned item?",
+      "ground_truth": "The refund is issued within 5 business days of NovaMart receiving the returned item.",
+      "answer": "I'm not able to find that information in our return policy. The provided context only discusses the eligibility and process for refunds, but it does not specify the number of business days it takes to receive a refund after NovaMart gets the returned item. If you have any other questions about our return policy, I'd be happy to help.",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.0,
+      "context_precision": 0.0
+    },
+    {
+      "id": "RQ-14",
+      "difficulty": "very_hard",
+      "topic": "multi-policy",
+      "question": "If I order a USB-C Hub and a Desk Lamp together, will I get free shipping? Show the calculation.",
+      "ground_truth": "Yes. USB-C Hub is $34.99 and Desk Lamp is $29.99, totalling $64.98 which exceeds the $50 free shipping threshold.",
+      "answer": "To determine if you'll get free shipping, let's calculate the total cost of your order.\n\nThe price of the USB-C Hub 7-in-1 is $34.99, and the price of the Desk Lamp LED is $29.99. \n\nTotal cost = Price of USB-C Hub + Price of Desk Lamp LED\nTotal cost = $34.99 + $29.99\nTotal cost = $64.98\n\nSince your total order is above $50, you will qualify for free standard shipping.",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0
+    },
+    {
+      "id": "RQ-15",
+      "difficulty": "very_hard",
+      "topic": "multi-policy",
+      "question": "My Mechanical Keyboard stopped working after 8 months. Is it still under warranty, and what exactly should I do?",
+      "ground_truth": "Yes. The Mechanical Keyboard has a 1-year manufacturer warranty so 8 months is within coverage. Contact support with your order ID to initiate a warranty claim.",
+      "answer": "I'm so sorry to hear that your Mechanical Keyboard stopped working. According to our product catalog, the Mechanical Keyboard carries a 1-year manufacturer warranty. Since it stopped working after 8 months, it is still under warranty.\n\nTo proceed with the warranty claim, I recommend contacting our manufacturer's support team directly. They will guide you through the process of repairing or replacing your Mechanical Keyboard. Please have your purchase receipt and the keyboard's serial number ready when you contact them.\n\nIf you need any further assistance or have any questions, feel free to ask, and I'll be happy to help.",
+      "faithfulness": 0.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 0.8
+    },
+    {
+      "id": "RQ-16",
+      "difficulty": "very_hard",
+      "topic": "products",
+      "question": "How much does the Bluetooth Speaker cost in your catalog?",
+      "ground_truth": "NovaMart does not sell a Bluetooth Speaker. The catalog includes Wireless Headphones, Phone Case, USB-C Hub, Laptop Stand, Mechanical Keyboard, Webcam HD, Desk Lamp, and Monitor 27 inch.",
+      "answer": "I couldn't find any information about a Bluetooth Speaker in our catalog. The available products related to audio are the Wireless Headphones, which cost $89.99. If you have any other questions or need more information, feel free to ask.",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.2,
+      "context_precision": 0.0
+    },
+    {
+      "id": "RQ-17",
+      "difficulty": "very_hard",
+      "topic": "multi-policy",
+      "question": "I am only buying a Phone Case for $14.99. How much will standard shipping cost me?",
+      "ground_truth": "Since $14.99 is below the $50 free shipping threshold, standard shipping will cost $4.99.",
+      "answer": "Since your order is below $50, the standard shipping fee will be $4.99. So, the total cost for your Phone Case, including standard shipping, will be $14.99 (item price) + $4.99 (shipping fee) = $19.98.",
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.8,
+      "context_precision": 1.0
+    },
+    {
+      "id": "RQ-18",
+      "difficulty": "very_hard",
+      "topic": "multi-policy",
+      "question": "My order was delayed by 4 days and I also want to return it within the window. Can I get both the $5 store credit and a full refund?",
+      "ground_truth": "Yes. The $5 delay credit is issued automatically for delays over 3 days. You can separately initiate a return for a refund within 30 days of delivery.",
+      "answer": "I'm happy to help you with your concern. According to our shipping policy, if your order is delayed beyond the estimated date, you are eligible for a $5 store credit if the delay is over 3 days. Since your order was delayed by 4 days, you will automatically receive the $5 store credit.\n\nRegarding the return, I'd be happy to assist you with the process. However, please note that our policy on returns and refunds is not specified in the information provided. I recommend contacting our support team with your order ID, and we'll be happy to guide you through the return process and inform you about any potential refund. We will investigate and provide an update within 12 hours.",
+      "faithfulness": 0.0,
+      "answer_relevancy": 0.5,
+      "context_precision": 0.4
+    },
+    {
+      "id": "RQ-19",
+      "difficulty": "very_hard",
+      "topic": "products",
+      "question": "What is the original price, the current sale price, and the exact dollar amount saved on the Mechanical Keyboard?",
+      "ground_truth": "The Mechanical Keyboard was originally $149.00 and is now $120.00, saving exactly $29.00.",
+      "answer": "The original price of the Mechanical Keyboard was $149.00, the current sale price is $120.00, and the exact dollar amount saved is $29.00.",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0
+    },
+    {
+      "id": "RQ-20",
+      "difficulty": "very_hard",
+      "topic": "orders",
+      "question": "I placed an order 90 minutes ago. Can I still change it? And if I want to cancel, is that possible?",
+      "ground_truth": "No — order changes are only allowed within 1 hour. Cancellation is still possible if the order has not yet been dispatched.",
+      "answer": "According to our policy, you can change your order within 1 hour of placing it. Since you placed your order 90 minutes ago, it's no longer possible to make changes.\n\nAs for cancellation, it's possible if the order is not yet dispatched. If your order has not been dispatched, you can cancel it. However, if it's already in transit, cancellation is not possible. I recommend contacting our support team with your order ID to check the status and proceed with cancellation if it's still eligible.",
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.8,
+      "context_precision": 0.8
+    }
+  ]
+}

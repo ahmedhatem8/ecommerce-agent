@@ -24,18 +24,66 @@ def index():
 @app.route('/eval')
 def eval_dashboard():
     import json as _json
-    results_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'eval', 'eval_results.json')
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    results_path  = os.path.join(base_dir, 'eval', 'eval_results.json')
+    baseline_path = os.path.join(base_dir, 'eval', 'baseline_rag_results.json')
+    hybrid_path   = os.path.join(base_dir, 'eval', 'hybrid_rag_results.json')
+
     if not os.path.exists(results_path):
         return "<h2>No eval results yet. Run <code>python eval/eval_suite.py</code> first.</h2>", 404
+
     with open(results_path, 'r', encoding='utf-8') as f:
         data = _json.load(f)
-    # If retrieval metrics missing, inject empty placeholders so template renders
+
     if 'context_precision' not in data.get('summary', {}):
         data['summary']['context_precision'] = None
         data['summary']['context_recall']    = None
     if 'retrieval' not in data:
         data['retrieval'] = []
-    return render_template('eval.html', data=data)
+
+    # Load RAG comparison files
+    baseline_data = None
+    hybrid_data   = None
+    if os.path.exists(baseline_path):
+        with open(baseline_path, 'r', encoding='utf-8') as f:
+            baseline_data = _json.load(f)
+    if os.path.exists(hybrid_path):
+        with open(hybrid_path, 'r', encoding='utf-8') as f:
+            hybrid_data = _json.load(f)
+
+    # Pre-compute per-question merged rows so the template stays simple
+    merged_rows = []
+    if baseline_data and hybrid_data:
+        hybrid_by_id = {t['id']: t for t in hybrid_data['tests']}
+        for bt in baseline_data['tests']:
+            ht = hybrid_by_id.get(bt['id'])
+            if not ht:
+                continue
+            b_sum = bt['faithfulness'] + bt['answer_relevancy'] + bt['context_precision']
+            h_sum = ht['faithfulness'] + ht['answer_relevancy'] + ht['context_precision']
+            if h_sum > b_sum + 0.015:
+                winner = 'hybrid'
+            elif b_sum > h_sum + 0.015:
+                winner = 'baseline'
+            else:
+                winner = 'equal'
+            merged_rows.append({
+                'id':         bt['id'],
+                'difficulty': bt['difficulty'],
+                'topic':      bt['topic'],
+                'question':   bt['question'],
+                'b_f':  bt['faithfulness'],     'b_ar': bt['answer_relevancy'], 'b_cp': bt['context_precision'],
+                'h_f':  ht['faithfulness'],     'h_ar': ht['answer_relevancy'], 'h_cp': ht['context_precision'],
+                'winner': winner,
+            })
+
+    rag_comparison = {
+        'baseline':     baseline_data,
+        'hybrid':       hybrid_data,
+        'merged_rows':  merged_rows,
+    }
+
+    return render_template('eval.html', data=data, rag_comparison=rag_comparison)
 
 
 @app.route('/api/start', methods=['POST'])

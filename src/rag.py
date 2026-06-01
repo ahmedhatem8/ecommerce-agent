@@ -108,14 +108,7 @@ def get_hybrid_chain():
                         key=lambda d: rrf_scores.get(d.page_content, 0),
                         reverse=True)
 
-        # Drop chunks whose RRF score is below 65% of the top chunk's score.
-        # Weak matches that only appeared in one retrieval list get cut here.
-        if ranked:
-            top_score = rrf_scores.get(ranked[0].page_content, 0.001)
-            min_score = top_score * 0.65
-            ranked = [d for d in ranked if rrf_scores.get(d.page_content, 0) >= min_score]
-
-        return ranked[:3] if ranked else []
+        return ranked[:4] if ranked else []
 
     llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
     prompt = ChatPromptTemplate.from_template("""

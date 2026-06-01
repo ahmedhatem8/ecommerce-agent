@@ -235,6 +235,105 @@
       .metrics-grid { grid-template-columns: 1fr 1fr; }
       .page { padding: 16px; }
     }
+
+    /* ── RAG COMPARISON ──────────────────────────────────────────── */
+    .rag-cards {
+      display: grid;
+      grid-template-columns: 1fr 88px 1fr;
+      gap: 0;
+      margin-bottom: 20px;
+      align-items: stretch;
+    }
+    .rag-panel {
+      background: white;
+      border-radius: 12px;
+      padding: 22px 24px 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    .rag-panel.baseline { border-top: 4px solid var(--blue);  border-radius: 12px 0 0 12px; }
+    .rag-panel.hybrid   { border-top: 4px solid var(--green); border-radius: 0 12px 12px 0; }
+    .rag-panel-badge {
+      display: inline-block; font-size: 0.68rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      padding: 2px 10px; border-radius: 20px; margin-bottom: 6px;
+    }
+    .rag-panel.baseline .rag-panel-badge { background: rgba(59,130,246,0.1);  color: var(--blue); }
+    .rag-panel.hybrid   .rag-panel-badge { background: rgba(16,185,129,0.1);  color: var(--green); }
+    .rag-panel-title { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+    .rag-panel-sub   { font-size: 0.72rem; color: var(--gray-400); margin-bottom: 18px; }
+    .rag-metric-block { margin-bottom: 15px; }
+    .rag-metric-block:last-child { margin-bottom: 0; }
+    .rag-metric-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+                        letter-spacing: 0.05em; color: var(--gray-400); margin-bottom: 2px; }
+    .rag-metric-val   { font-size: 1.9rem; font-weight: 800; color: var(--navy);
+                        line-height: 1; margin-bottom: 5px; }
+    .rag-metric-track { height: 5px; background: var(--gray-100); border-radius: 4px; overflow: hidden; }
+    .rag-panel.baseline .rag-metric-fill { height:100%; background:var(--blue);  border-radius:4px; transition:width .8s; }
+    .rag-panel.hybrid   .rag-metric-fill { height:100%; background:var(--green); border-radius:4px; transition:width .8s; }
+
+    .rag-vs {
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 18px;
+      background: var(--gray-100); padding: 0 10px;
+    }
+    .rag-vs-label { font-size: 0.9rem; font-weight: 800; color: var(--gray-400); }
+    .delta-chip { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+    .delta-chip-label { font-size: 0.58rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.05em; }
+    .delta-chip-value {
+      font-size: 0.78rem; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+    }
+    .delta-pos  { background: rgba(16,185,129,0.12); color: #059669; }
+    .delta-neg  { background: rgba(239,68,68,0.12);  color: #dc2626; }
+    .delta-neut { background: rgba(148,163,184,0.12); color: var(--gray-400); }
+
+    /* Stacked comparison bars */
+    .cbar-wrap { background: white; border-radius: 12px; padding: 20px 24px;
+                 box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .cbar-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+                  letter-spacing: 0.06em; color: var(--gray-400); margin-bottom: 16px; }
+    .cbar-row { margin-bottom: 16px; }
+    .cbar-row:last-child { margin-bottom: 0; }
+    .cbar-metric-label { font-size: 0.8rem; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+    .cbar-line { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+    .cbar-name { font-size: 0.68rem; color: var(--gray-400); width: 58px; text-align: right; flex-shrink: 0; }
+    .cbar-track { flex: 1; height: 11px; background: var(--gray-100); border-radius: 6px; overflow: hidden; }
+    .cbar-fill-b { height: 100%; background: var(--blue);  border-radius: 6px; transition: width .8s; }
+    .cbar-fill-h { height: 100%; background: var(--green); border-radius: 6px; transition: width .8s; }
+    .cbar-val { font-size: 0.75rem; font-weight: 700; color: var(--gray-700); width: 36px; flex-shrink: 0; }
+
+    /* Per-difficulty cards */
+    .diff-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 20px; }
+    .diff-card { background: white; border-radius: 10px; padding: 14px 16px;
+                 box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    .diff-card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .diff-card-n { font-size: 0.7rem; color: var(--gray-400); }
+    .diff-row  { display:flex; justify-content:space-between; align-items:center;
+                 font-size: 0.73rem; color: var(--gray-600); margin-bottom: 7px; }
+    .diff-vals { display: flex; gap: 6px; align-items: center; font-size: 0.75rem; }
+    .dv-b { font-weight: 600; color: var(--blue); }
+    .dv-h { font-weight: 600; color: var(--green); }
+    .dv-sep { color: var(--gray-300); }
+
+    /* Extra pills */
+    .pill-medium { background: rgba(59,130,246,0.1);  color: #2563eb; }
+    .pill-hard   { background: rgba(245,158,11,0.12); color: #d97706; }
+    .pill-vhard  { background: rgba(239,68,68,0.1);   color: #dc2626; }
+    .pill-better { background: rgba(16,185,129,0.12); color: #059669; }
+    .pill-equal  { background: rgba(148,163,184,0.12);color: var(--gray-400); }
+
+    /* Not-run placeholder */
+    .rag-not-run {
+      background: white; border-radius: 12px; padding: 36px 24px;
+      text-align: center; border: 2px dashed var(--gray-200);
+      margin-bottom: 32px;
+    }
+    .rag-not-run p { font-size: 0.88rem; color: var(--gray-400); margin-bottom: 6px; }
+    .rag-not-run strong { color: var(--navy); }
+    .rag-not-run code {
+      display: inline-block; margin: 4px 8px;
+      background: var(--gray-100); padding: 5px 14px;
+      border-radius: 6px; font-size: 0.8rem; color: var(--navy);
+    }
   </style>
 </head>
 <body>
@@ -327,6 +426,205 @@
     </div>
 
   </div>
+
+  <!-- ── RAG PIPELINE COMPARISON ── -->
+  <p class="section-title"><span>⚡</span> RAG Pipeline Comparison: Baseline vs Hybrid</p>
+
+  {% if rag_comparison.baseline and rag_comparison.hybrid %}
+  {% set b = rag_comparison.baseline %}
+  {% set h = rag_comparison.hybrid %}
+
+  <!-- Side-by-side metric panels with delta column -->
+  <div class="rag-cards">
+
+    <div class="rag-panel baseline">
+      <span class="rag-panel-badge">Baseline</span>
+      <div class="rag-panel-title">Dense Retrieval Only</div>
+      <div class="rag-panel-sub">ChromaDB · all-MiniLM-L6-v2 · {{ b.summary.total_questions }} questions</div>
+      <div class="rag-metric-block">
+        <div class="rag-metric-label">Faithfulness</div>
+        <div class="rag-metric-val">{{ b.summary.faithfulness }}</div>
+        <div class="rag-metric-track"><div class="rag-metric-fill" style="width:{{ (b.summary.faithfulness*100)|round }}%"></div></div>
+      </div>
+      <div class="rag-metric-block">
+        <div class="rag-metric-label">Answer Relevancy</div>
+        <div class="rag-metric-val">{{ b.summary.answer_relevancy }}</div>
+        <div class="rag-metric-track"><div class="rag-metric-fill" style="width:{{ (b.summary.answer_relevancy*100)|round }}%"></div></div>
+      </div>
+      <div class="rag-metric-block">
+        <div class="rag-metric-label">Context Precision</div>
+        <div class="rag-metric-val">{{ b.summary.context_precision }}</div>
+        <div class="rag-metric-track"><div class="rag-metric-fill" style="width:{{ (b.summary.context_precision*100)|round }}%"></div></div>
+      </div>
+    </div>
+
+    <div class="rag-vs">
+      <div class="rag-vs-label">VS</div>
+      {% set metrics = [
+        ('Faith.', b.summary.faithfulness, h.summary.faithfulness),
+        ('Relev.',  b.summary.answer_relevancy, h.summary.answer_relevancy),
+        ('Prec.',   b.summary.context_precision, h.summary.context_precision)
+      ] %}
+      {% for label, bv, hv in metrics %}
+        {% set raw = ((hv - bv) * 1000) | round | int %}
+        {% set d = raw / 1000 %}
+        <div class="delta-chip">
+          <span class="delta-chip-label">{{ label }}</span>
+          <span class="delta-chip-value {% if raw > 1 %}delta-pos{% elif raw < -1 %}delta-neg{% else %}delta-neut{% endif %}">
+            {% if raw > 1 %}+{% endif %}{{ "%.3f"|format(d) }}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="rag-panel hybrid">
+      <span class="rag-panel-badge">Hybrid</span>
+      <div class="rag-panel-title">BM25 + Dense + RRF Fusion</div>
+      <div class="rag-panel-sub">Reciprocal Rank Fusion · {{ h.summary.total_questions }} questions</div>
+      <div class="rag-metric-block">
+        <div class="rag-metric-label">Faithfulness</div>
+        <div class="rag-metric-val">{{ h.summary.faithfulness }}</div>
+        <div class="rag-metric-track"><div class="rag-metric-fill" style="width:{{ (h.summary.faithfulness*100)|round }}%"></div></div>
+      </div>
+      <div class="rag-metric-block">
+        <div class="rag-metric-label">Answer Relevancy</div>
+        <div class="rag-metric-val">{{ h.summary.answer_relevancy }}</div>
+        <div class="rag-metric-track"><div class="rag-metric-fill" style="width:{{ (h.summary.answer_relevancy*100)|round }}%"></div></div>
+      </div>
+      <div class="rag-metric-block">
+        <div class="rag-metric-label">Context Precision</div>
+        <div class="rag-metric-val">{{ h.summary.context_precision }}</div>
+        <div class="rag-metric-track"><div class="rag-metric-fill" style="width:{{ (h.summary.context_precision*100)|round }}%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stacked comparison bars -->
+  <div class="cbar-wrap">
+    <div class="cbar-title">Score Comparison — Baseline (blue) vs Hybrid (green)</div>
+    {% set bar_metrics = [
+      ('Faithfulness',     b.summary.faithfulness,     h.summary.faithfulness),
+      ('Answer Relevancy', b.summary.answer_relevancy,  h.summary.answer_relevancy),
+      ('Context Precision',b.summary.context_precision, h.summary.context_precision)
+    ] %}
+    {% for label, bv, hv in bar_metrics %}
+    <div class="cbar-row">
+      <div class="cbar-metric-label">{{ label }}</div>
+      <div class="cbar-line">
+        <span class="cbar-name">Baseline</span>
+        <div class="cbar-track"><div class="cbar-fill-b" style="width:{{ (bv*100)|round }}%"></div></div>
+        <span class="cbar-val">{{ "%.3f"|format(bv) }}</span>
+      </div>
+      <div class="cbar-line">
+        <span class="cbar-name">Hybrid</span>
+        <div class="cbar-track"><div class="cbar-fill-h" style="width:{{ (hv*100)|round }}%"></div></div>
+        <span class="cbar-val">{{ "%.3f"|format(hv) }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Per-difficulty breakdown -->
+  {% if b.by_difficulty and h.by_difficulty %}
+  <div class="diff-cards">
+    {% set dmap = [('medium','Medium','pill-medium'),('hard','Hard','pill-hard'),('very_hard','Very Hard','pill-vhard')] %}
+    {% for dkey, dlabel, dpill in dmap %}
+    {% if dkey in b.by_difficulty and dkey in h.by_difficulty %}
+    {% set bd = b.by_difficulty[dkey] %}
+    {% set hd = h.by_difficulty[dkey] %}
+    <div class="diff-card">
+      <div class="diff-card-head">
+        <span class="pill {{ dpill }}">{{ dlabel }}</span>
+        <span class="diff-card-n">n={{ bd.n }}</span>
+      </div>
+      <div class="diff-row">
+        <span>Faithfulness</span>
+        <div class="diff-vals">
+          <span class="dv-b">{{ "%.3f"|format(bd.faithfulness) }}</span>
+          <span class="dv-sep">→</span>
+          <span class="dv-h">{{ "%.3f"|format(hd.faithfulness) }}</span>
+        </div>
+      </div>
+      <div class="diff-row">
+        <span>Ans. Relevancy</span>
+        <div class="diff-vals">
+          <span class="dv-b">{{ "%.3f"|format(bd.answer_relevancy) }}</span>
+          <span class="dv-sep">→</span>
+          <span class="dv-h">{{ "%.3f"|format(hd.answer_relevancy) }}</span>
+        </div>
+      </div>
+      <div class="diff-row">
+        <span>Context Precision</span>
+        <div class="diff-vals">
+          <span class="dv-b">{{ "%.3f"|format(bd.context_precision) }}</span>
+          <span class="dv-sep">→</span>
+          <span class="dv-h">{{ "%.3f"|format(hd.context_precision) }}</span>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Per-question comparison table -->
+  {% if rag_comparison.merged_rows %}
+  <div class="table-wrap" style="margin-bottom:32px">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Difficulty</th>
+          <th>Topic</th>
+          <th style="max-width:240px">Question</th>
+          <th style="text-align:center;color:rgba(147,197,253,1)">B·F</th>
+          <th style="text-align:center;color:rgba(147,197,253,1)">B·AR</th>
+          <th style="text-align:center;color:rgba(147,197,253,1)">B·CP</th>
+          <th style="text-align:center;color:rgba(110,231,183,1)">H·F</th>
+          <th style="text-align:center;color:rgba(110,231,183,1)">H·AR</th>
+          <th style="text-align:center;color:rgba(110,231,183,1)">H·CP</th>
+          <th>Better</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% set dpills = {'medium':'pill-medium','hard':'pill-hard','very_hard':'pill-vhard'} %}
+        {% set dlabels = {'medium':'Medium','hard':'Hard','very_hard':'Very Hard'} %}
+        {% for row in rag_comparison.merged_rows %}
+        <tr>
+          <td><code style="font-size:0.72rem;color:var(--gray-600)">{{ row.id }}</code></td>
+          <td><span class="pill {{ dpills.get(row.difficulty,'') }}">{{ dlabels.get(row.difficulty, row.difficulty) }}</span></td>
+          <td style="font-size:0.72rem;color:var(--gray-400)">{{ row.topic }}</td>
+          <td style="max-width:220px;font-size:0.77rem">{{ row.question[:80] }}{% if row.question|length > 80 %}…{% endif %}</td>
+          <td style="text-align:center;font-size:0.77rem;color:var(--blue)">{{ "%.3f"|format(row.b_f) }}</td>
+          <td style="text-align:center;font-size:0.77rem;color:var(--blue)">{{ "%.3f"|format(row.b_ar) }}</td>
+          <td style="text-align:center;font-size:0.77rem;color:var(--blue)">{{ "%.3f"|format(row.b_cp) }}</td>
+          <td style="text-align:center;font-size:0.77rem;color:var(--green)">{{ "%.3f"|format(row.h_f) }}</td>
+          <td style="text-align:center;font-size:0.77rem;color:var(--green)">{{ "%.3f"|format(row.h_ar) }}</td>
+          <td style="text-align:center;font-size:0.77rem;color:var(--green)">{{ "%.3f"|format(row.h_cp) }}</td>
+          <td>
+            {% if row.winner == 'hybrid' %}
+              <span class="pill pill-better">Hybrid</span>
+            {% elif row.winner == 'baseline' %}
+              <span class="pill pill-happy">Baseline</span>
+            {% else %}
+              <span class="pill pill-equal">Tie</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  {% else %}
+  <div class="rag-not-run">
+    <p><strong>RAG comparison not yet run.</strong></p>
+    <p>Execute both scripts, then reload this page:</p>
+    <code>python eval/baseline_ragas.py</code>
+    <code>python eval/hybrid_ragas.py</code>
+  </div>
+  {% endif %}
 
   <!-- ── CATEGORY BREAKDOWN ── -->
   <p class="section-title"><span>🗂️</span> Results by Category</p>
