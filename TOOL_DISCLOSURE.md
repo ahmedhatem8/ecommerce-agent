@@ -56,4 +56,4 @@
 
 | Tool | Provider | How It Was Used |
 |---|---|---|
-| Claude (claude-sonnet-4-6) | Anthropic | Used as a coding assistant during development for writing, reviewing, and debugging code across all modules |
+| Claude (claude-opus-4-8) | Anthropic | Used as a coding assistant during development for writing, reviewing, and debugging code across all modules |
