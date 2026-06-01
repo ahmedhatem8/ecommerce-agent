@@ -1,0 +1,39 @@
+{
+  "CUST-117": {
+    "total_sessions": 2,
+    "past_orders": [
+      "ORD-1005"
+    ],
+    "stated_preferences": [],
+    "unresolved_complaints": [],
+    "session_summaries": [
+      "The customer inquired about the status of their order and then asked about the refund process, which was resolved with the customer being informed of the return window.",
+      "The customer, Fernando Spence, had a conversation with the agent but did not report any issues or concerns that were resolved"
+    ],
+    "escalations": 0,
+    "last_seen": "2026-06-01"
+  },
+  "CUST-115": {
+    "total_sessions": 5,
+    "past_orders": [
+      "ORD-1001",
+      "ORD-1032",
+      "ORD-1048",
+      "ORD-1050",
+      "ORD-1078",
+      "ORD-1080",
+      "ORD-1186"
+    ],
+    "stated_preferences": [],
+    "unresolved_complaints": [],
+    "session_summaries": [
+      "The customer inquired about their past orders and the agent provided information about their most recent order, resolving the inquiry.",
+      "Session completed.",
+      "Session completed.",
+      "The customer inquired about their last question and orders, and the agent provided a summary of their 7 orders, but it is unclear if the customer's issues were fully resolved.",
+      "Session completed."
+    ],
+    "escalations": 0,
+    "last_seen": "2026-06-01"
+  }
+}

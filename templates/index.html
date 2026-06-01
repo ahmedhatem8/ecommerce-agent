@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovaMart — Premium Tech Store</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy:      #1e293b;
+      --navy-deep: #0f172a;
+      --blue:      #3b82f6;
+      --blue-dark: #1d4ed8;
+      --green:     #10b981;
+      --red:       #ef4444;
+      --amber:     #f59e0b;
+      --purple:    #8b5cf6;
+      --gray-50:   #f8fafc;
+      --gray-100:  #f1f5f9;
+      --gray-200:  #e2e8f0;
+      --gray-400:  #94a3b8;
+      --gray-600:  #475569;
+      --gray-700:  #334155;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-700);
+      line-height: 1.5;
+    }
+
+    /* ─── PROMO BANNER ─── */
+    .promo-banner {
+      background: linear-gradient(90deg, #1d4ed8 0%, #7c3aed 50%, #1d4ed8 100%);
+      background-size: 200% 100%;
+      animation: promoSlide 6s linear infinite;
+      color: white;
+      text-align: center;
+      padding: 0.45rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+    @keyframes promoSlide {
+      0%   { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--navy);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.35);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+    .logo {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .logo span { color: var(--blue); }
+
+    .search-bar {
+      flex: 1;
+      max-width: 400px;
+      display: flex;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .search-bar input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: white;
+      padding: 0.5rem 0.875rem;
+      font-size: 0.875rem;
+    }
+    .search-bar input::placeholder { color: rgba(255,255,255,0.3); }
+    .search-bar button {
+      background: var(--blue);
+      border: none;
+      color: white;
+      padding: 0 1rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .search-bar button:hover { background: var(--blue-dark); }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    nav a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    nav a:hover { color: #fff; }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
+    .cart-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .cart-btn:hover { background: var(--blue-dark); transform: translateY(-1px); }
+
+    /* ─── TRUST BAR ─── */
+    .trust-bar {
+      background: #fff;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .trust-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      gap: 2rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .trust-inner::-webkit-scrollbar { display: none; }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      white-space: nowrap;
+      color: var(--gray-600);
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .trust-item .ti { font-size: 1rem; }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #0f2744 100%);
+      padding: 5rem 1.5rem 4.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(ellipse, rgba(59,130,246,0.18) 0%, transparent 70%);
+      pointer-events: none;
+      animation: glowPulse 5s ease-in-out infinite alternate;
+    }
+    @keyframes glowPulse {
+      0%   { opacity: 0.6; transform: translateX(-50%) scale(1); }
+      100% { opacity: 1;   transform: translateX(-50%) scale(1.15); }
+    }
+    .hero-content {
+      max-width: 580px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(59,130,246,0.15);
+      border: 1px solid rgba(59,130,246,0.35);
+      color: #93c5fd;
+      padding: 0.3rem 1rem;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1.75rem;
+    }
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 1.1rem;
+      letter-spacing: -1px;
+    }
+    .hero h1 em { color: var(--blue); font-style: normal; }
+    .hero p {
+      color: rgba(255,255,255,0.62);
+      font-size: 1.05rem;
+      margin-bottom: 2.25rem;
+      line-height: 1.7;
+    }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      padding: 0.8rem 2.2rem;
+      border-radius: 10px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      background: var(--blue-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(59,130,246,0.4);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: #fff;
+      padding: 0.8rem 2.2rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.25);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-ghost:hover {
+      border-color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.06);
+    }
+    .hero-stats {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat .num {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+    }
+    .hero-stat .lbl {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 0.2rem;
+    }
+
+    /* ─── PRODUCTS ─── */
+    .products-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: -0.5px;
+    }
+    .section-header p { color: var(--gray-400); margin-top: 0.4rem; }
+    .product-filters {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .filter-btn {
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      color: var(--gray-600);
+      padding: 0.4rem 1.1rem;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1.25rem;
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      transition: transform 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+    }
+    .product-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    }
+    .product-img {
+      height: 175px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.8rem;
+      position: relative;
+    }
+    .badge-pill {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 0.18rem 0.6rem;
+      border-radius: 100px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .badge-blue  { background: var(--blue);   color: #fff; }
+    .badge-green { background: var(--green);  color: #fff; }
+    .badge-red   { background: var(--red);    color: #fff; }
+    .badge-amber { background: var(--amber);  color: #fff; }
+    .wishlist-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 30px;
+      height: 30px;
+      background: rgba(255,255,255,0.85);
+      border: none;
+      border-radius: 50%;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.2s;
+      opacity: 0;
+    }
+    .product-card:hover .wishlist-btn { opacity: 1; }
+    .wishlist-btn:hover { background: #fff; transform: scale(1.1); }
+    .product-body { padding: 1.1rem 1.1rem 1.1rem; }
+    .product-cat {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--blue);
+      margin-bottom: 0.2rem;
+    }
+    .product-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.4rem;
+    }
+    .product-rating {
+      font-size: 0.75rem;
+      color: var(--amber);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .rating-count { color: var(--gray-400); }
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .product-prices { line-height: 1; }
+    .product-price {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--navy);
+    }
+    .product-old {
+      font-size: 0.78rem;
+      color: var(--gray-400);
+      text-decoration: line-through;
+      margin-left: 0.3rem;
+    }
+    .add-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--blue);
+      border: none;
+      border-radius: 9px;
+      color: #fff;
+      font-size: 1.35rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.15s;
+      line-height: 1;
+    }
+    .add-btn:hover { background: var(--blue-dark); transform: scale(1.08); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.82rem;
+    }
+    footer span { color: rgba(255,255,255,0.65); }
+
+    /* ─── CHAT FAB ─── */
+    .chat-fab {
+      position: fixed;
+      bottom: 1.75rem;
+      right: 1.75rem;
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #3b82f6, #1d4ed8);
+      border: none;
+      cursor: pointer;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 28px rgba(59,130,246,0.55);
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: fabBreath 3.5s ease-in-out infinite;
+    }
+    @keyframes fabBreath {
+      0%,100% { box-shadow: 0 8px 28px rgba(59,130,246,0.55); }
+      50%      { box-shadow: 0 8px 38px rgba(59,130,246,0.85), 0 0 0 10px rgba(59,130,246,0.08); }
+    }
+    .chat-fab:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 36px rgba(59,130,246,0.75);
+    }
+    .chat-fab svg { width: 28px; height: 28px; }
+    .fab-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 14px;
+      height: 14px;
+      background: var(--green);
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
+    .fab-tooltip {
+      position: absolute;
+      right: 74px;
+      background: var(--navy);
+      color: #fff;
+      padding: 0.35rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .chat-fab:hover .fab-tooltip { opacity: 1; }
+
+    /* ─── CHAT PANEL ─── */
+    .chat-panel {
+      position: fixed;
+      bottom: 6rem;
+      right: 1.75rem;
+      width: 420px;
+      height: min(700px, calc(100dvh - 7.5rem));
+      max-height: calc(100dvh - 7.5rem);
+      background: #0d1b2a;
+      border-radius: 22px;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+      z-index: 499;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: scale(0.85) translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease;
+      transform-origin: bottom right;
+    }
+    .chat-panel.open {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* Panel Header */
+    .panel-header {
+      background: linear-gradient(135deg, #1a3050 0%, #1e293b 100%);
+      padding: 1rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      flex-shrink: 0;
+    }
+    .bot-ava {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+    }
+    .bot-meta { flex: 1; min-width: 0; }
+    .bot-meta-name { color: #fff; font-weight: 700; font-size: 0.95rem; }
+    .bot-meta-status {
+      color: var(--green);
+      font-size: 0.72rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .status-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.3; }
+    }
+    .panel-close {
+      background: rgba(255,255,255,0.07);
+      border: none;
+      color: rgba(255,255,255,0.55);
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+    .panel-close:hover { background: rgba(255,255,255,0.14); color: #fff; }
+    .panel-expand {
+      background: rgba(255,255,255,0.07);
+      border: none;
+      color: rgba(255,255,255,0.55);
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+    .panel-expand:hover { background: rgba(255,255,255,0.14); color: #fff; }
+    .panel-expand svg { width: 15px; height: 15px; }
+
+    /* Fullscreen state */
+    .chat-panel.fullscreen {
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      height: 100dvh !important;
+      max-height: 100dvh !important;
+      border-radius: 0 !important;
+      transform-origin: center !important;
+      z-index: 9999 !important;
+      transition: top 0.3s cubic-bezier(0.4,0,0.2,1),
+                  left 0.3s cubic-bezier(0.4,0,0.2,1),
+                  width 0.3s cubic-bezier(0.4,0,0.2,1),
+                  height 0.3s cubic-bezier(0.4,0,0.2,1),
+                  border-radius 0.3s ease,
+                  opacity 0.25s ease;
+    }
+    .chat-panel.fullscreen.open {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    /* ─── FULLSCREEN CENTERED LAYOUT ─── */
+    .chat-panel.fullscreen .order-screen {
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .chat-panel.fullscreen .order-form {
+      max-width: 440px;
+      width: 100%;
+    }
+    .chat-panel.fullscreen .welcome-copy h3 { font-size: 1.5rem; }
+    .chat-panel.fullscreen .welcome-copy p  { font-size: 0.9rem; }
+    .chat-panel.fullscreen .welcome-ava { width: 96px; height: 96px; font-size: 3rem; }
+    .chat-panel.fullscreen .chat-screen {
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .chat-panel.fullscreen .routing-viz {
+      margin: 0 1rem;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .chat-panel.fullscreen .routing-top {
+      padding: 0.75rem 1.25rem;
+    }
+    .chat-panel.fullscreen .routing-label {
+      font-size: 0.72rem;
+    }
+    .chat-panel.fullscreen .routing-svg-wrap {
+      padding: 0.5rem 1.25rem 0.75rem;
+      display: flex;
+      justify-content: center;
+    }
+    .chat-panel.fullscreen .routing-svg-wrap svg {
+      max-width: 420px;
+      width: 100%;
+    }
+    .chat-panel.fullscreen .input-area {
+      padding: 0.9rem 1rem;
+    }
+    .chat-panel.fullscreen .msgs {
+      padding: 1.25rem 1rem;
+    }
+    .chat-panel.fullscreen .msg-content {
+      max-width: 68%;
+    }
+
+    /* ─── ORDER INPUT SCREEN ─── */
+    .order-screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.75rem;
+      gap: 1.5rem;
+    }
+    .order-screen.gone { display: none; }
+    .welcome-ava {
+      width: 76px;
+      height: 76px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: 0 10px 30px rgba(59,130,246,0.35);
+    }
+    .welcome-copy { text-align: center; }
+    .welcome-copy h3 { color: #fff; font-size: 1.2rem; font-weight: 800; margin-bottom: 0.4rem; }
+    .welcome-copy p  { color: rgba(255,255,255,0.45); font-size: 0.83rem; line-height: 1.6; }
+    .order-form { width: 100%; }
+    .form-label {
+      display: block;
+      color: rgba(255,255,255,0.5);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 0.4rem;
+    }
+    .form-input {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: #fff;
+      font-size: 0.925rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      font-family: inherit;
+      margin-bottom: 0.875rem;
+    }
+    .form-input::placeholder { color: rgba(255,255,255,0.22); }
+    .form-input:focus { border-color: var(--blue); background: rgba(59,130,246,0.06); }
+    .start-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: #fff;
+      border: none;
+      padding: 0.85rem;
+      border-radius: 11px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .start-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(59,130,246,0.4);
+    }
+    .skip-link {
+      display: block;
+      text-align: center;
+      margin-top: 0.75rem;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .skip-link:hover { color: rgba(255,255,255,0.6); }
+
+    /* ─── CHAT SCREEN ─── */
+    .chat-screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .chat-screen.gone { display: none; }
+
+    /* Messages */
+    .msgs {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      scroll-behavior: smooth;
+    }
+    .msgs::-webkit-scrollbar { width: 3px; }
+    .msgs::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+    .msg-row { display: flex; gap: 0.45rem; animation: msgIn 0.3s ease-out; }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .msg-row.user { flex-direction: row-reverse; }
+
+    .msg-ava {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      align-self: flex-end;
+    }
+    .msg-ava.bot { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+    .msg-ava.user-av { background: rgba(255,255,255,0.09); color: rgba(255,255,255,0.6); }
+
+    .msg-content { max-width: 76%; }
+    .msg-agent-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 100px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 0.25rem;
+    }
+    .msg-bubble {
+      padding: 0.65rem 0.9rem;
+      border-radius: 14px;
+      font-size: 0.855rem;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+    .msg-row.bot .msg-bubble {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.88);
+      border-bottom-left-radius: 4px;
+    }
+    .msg-row.user .msg-bubble {
+      background: var(--blue);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    /* Typing */
+    .typing-bubble {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0.65rem 0.9rem;
+      background: rgba(255,255,255,0.06);
+      border-radius: 14px;
+      border-bottom-left-radius: 4px;
+    }
+    .t-dot {
+      width: 5px; height: 5px;
+      background: rgba(255,255,255,0.35);
+      border-radius: 50%;
+      animation: tBounce 1.3s ease-in-out infinite;
+    }
+    .t-dot:nth-child(2) { animation-delay: 0.18s; }
+    .t-dot:nth-child(3) { animation-delay: 0.36s; }
+    @keyframes tBounce {
+      0%,80%,100% { transform: translateY(0);  opacity: 0.35; }
+      40%          { transform: translateY(-5px); opacity: 1; }
+    }
+
+    /* ─── ROUTING VIZ ─── */
+    .routing-viz {
+      margin: 0 0.875rem;
+      border: 1px solid rgba(255,255,255,0.055);
+      border-radius: 13px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.02);
+      flex-shrink: 0;
+    }
+    .routing-top {
+      padding: 0.5rem 0.875rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .routing-label {
+      font-size: 0.67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .routing-label::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--purple);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .routing-active {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.28);
+      transition: color 0.3s;
+    }
+    .routing-svg-wrap { padding: 0.6rem 0.75rem 0.5rem; }
+
+    /* ─── INPUT AREA ─── */
+    .input-area {
+      padding: 0.8rem;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+    .chat-input {
+      flex: 1;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 11px;
+      padding: 0.6rem 0.875rem;
+      color: #fff;
+      font-size: 0.875rem;
+      font-family: inherit;
+      outline: none;
+      resize: none;
+      max-height: 90px;
+      transition: border-color 0.2s;
+      line-height: 1.4;
+    }
+    .chat-input::-webkit-scrollbar { display: none; }
+    .chat-input { scrollbar-width: none; }
+    .chat-input::placeholder { color: rgba(255,255,255,0.25); }
+    .chat-input:focus { border-color: rgba(59,130,246,0.5); }
+    .send-btn {
+      width: 38px;
+      height: 38px;
+      background: var(--blue);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.15s;
+      flex-shrink: 0;
+    }
+    .send-btn:hover  { background: var(--blue-dark); transform: scale(1.06); }
+    .send-btn:disabled { background: rgba(59,130,246,0.3); cursor: not-allowed; transform: none; }
+
+    .done-btn {
+      height: 38px;
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 10px;
+      color: #10b981;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0.7rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      transition: background 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+      white-space: nowrap;
+      gap: 0.25rem;
+    }
+    .done-btn:hover:not(:disabled) {
+      background: rgba(16,185,129,0.25);
+      border-color: rgba(16,185,129,0.55);
+    }
+    .done-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .msg-system {
+      text-align: center;
+      padding: 0.5rem 1rem;
+      animation: msgIn 0.3s ease-out;
+    }
+    .msg-system-inner {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid;
+    }
+    .msg-system-inner.success {
+      background: rgba(16,185,129,0.12);
+      color: #10b981;
+      border-color: rgba(16,185,129,0.28);
+    }
+    .new-session-btn {
+      display: block;
+      margin: 0.5rem auto 0;
+      background: rgba(59,130,246,0.12);
+      border: 1px solid rgba(59,130,246,0.3);
+      color: #3b82f6;
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .new-session-btn:hover { background: rgba(59,130,246,0.22); }
+
+    /* responsive */
+    @media (max-width: 480px) {
+      .chat-panel {
+        right: 0; bottom: 5.5rem;
+        width: 100%; height: calc(100dvh - 5.5rem);
+        border-radius: 20px 20px 0 0;
+      }
+      nav, .search-bar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PROMO BANNER -->
+<div class="promo-banner">
+  🚀 Free shipping on orders over $50 &nbsp;·&nbsp; Use <strong>NOVA20</strong> for 20% off your first order &nbsp;·&nbsp; Same-day delivery in Cairo before 12PM
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">Nova<span>Mart</span></div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search for products, brands…" />
+      <button>🔍</button>
+    </div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#products">Products</a>
+      <a href="#">Deals</a>
+      <a href="#">About</a>
+      <a href="/eval" style="background:rgba(139,92,246,0.15);color:#a78bfa;border:1px solid rgba(139,92,246,0.3);border-radius:6px;padding:4px 12px;font-size:0.8rem;font-weight:600;">AI Eval</a>
+    </nav>
+    <div class="header-right">
+      <button class="cart-btn">
+        🛒 Cart <span id="cartCount">(0)</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item"><span class="ti">🚚</span> Free shipping over $50</div>
+    <div class="trust-item"><span class="ti">🔒</span> Secure checkout</div>
+    <div class="trust-item"><span class="ti">↩️</span> 30-day returns</div>
+    <div class="trust-item"><span class="ti">⚡</span> Same-day delivery (Cairo)</div>
+    <div class="trust-item"><span class="ti">🤖</span> 24/7 AI support</div>
+    <div class="trust-item"><span class="ti">⭐</span> 4.9/5 from 12,000+ reviews</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-chip">✨ New Arrivals 2026</div>
+    <h1>Next-Gen Tech<br/><em>Delivered</em> to Your Door</h1>
+    <p>Premium electronics, smart gadgets, and tech accessories curated for modern living. Fast shipping across Egypt & UAE.</p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-primary">Shop Now →</a>
+      <a href="#" class="btn-ghost">View Deals</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">200+</div><div class="lbl">Products</div></div>
+      <div class="hero-stat"><div class="num">12K+</div><div class="lbl">Happy Customers</div></div>
+      <div class="hero-stat"><div class="num">4.9★</div><div class="lbl">Average Rating</div></div>
+      <div class="hero-stat"><div class="num">2hr</div><div class="lbl">Avg. Response</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="products">
+  <div class="section-header">
+    <h2>Featured Products</h2>
+    <p>Hand-picked tech essentials for work, creativity, and everyday life</p>
+  </div>
+  <div class="product-filters">
+    <button class="filter-btn active">All</button>
+    <button class="filter-btn">Audio</button>
+    <button class="filter-btn">Peripherals</button>
+    <button class="filter-btn">Displays</button>
+    <button class="filter-btn">Accessories</button>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 <span>NovaMart</span>. All rights reserved. · Egypt & UAE delivery only · Powered by AI support</p>
+</footer>
+
+<!-- CHAT FAB -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()">
+  <div class="fab-badge"></div>
+  <div class="fab-tooltip">Chat with AI</div>
+  <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 11H7v-2h10v2zm0-3H7V8h10v2z"/>
+  </svg>
+</button>
+
+<!-- CHAT PANEL -->
+<div class="chat-panel" id="chatPanel">
+
+  <!-- Header -->
+  <div class="panel-header">
+    <div class="bot-ava">🤖</div>
+    <div class="bot-meta">
+      <div class="bot-meta-name">NovaMart Assistant</div>
+      <div class="bot-meta-status">
+        <div class="status-dot"></div>
+        AI-Powered · LangGraph
+      </div>
+    </div>
+    <button class="panel-expand" id="expandBtn" onclick="toggleFullscreen()" title="Expand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+        <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+      </svg>
+    </button>
+    <button class="panel-close" onclick="toggleChat()">✕</button>
+  </div>
+
+  <!-- ORDER INPUT SCREEN -->
+  <div class="order-screen" id="orderScreen">
+    <div class="welcome-ava">🤖</div>
+    <div class="welcome-copy">
+      <h3>Hi! I'm your NovaMart assistant</h3>
+      <p>Enter your customer ID for personalized help, or skip to start chatting right away.</p>
+    </div>
+    <div class="order-form">
+      <label class="form-label">Customer ID (Optional)</label>
+      <input class="form-input" id="orderIdInput" type="text" placeholder="e.g. CUST-115"
+             onkeydown="if(event.key==='Enter') startChat()" />
+      <button class="start-btn" id="startBtn" onclick="startChat()">Start Chat →</button>
+      <span class="skip-link" onclick="startChat(true)">Skip — chat without order ID</span>
+    </div>
+  </div>
+
+  <!-- CHAT SCREEN -->
+  <div class="chat-screen gone" id="chatScreen">
+
+    <!-- Messages Area -->
+    <div class="msgs" id="msgsArea"></div>
+
+    <!-- Routing Visualization -->
+    <div class="routing-viz">
+      <div class="routing-top">
+        <div class="routing-label">LangGraph Routing Engine</div>
+        <div class="routing-active" id="routingStatus">Standby</div>
+      </div>
+      <div class="routing-svg-wrap">
+        <svg id="routeSvg" viewBox="0 0 340 268" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3.5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="softGlow">
+              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <marker id="arrowDim" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 z" fill="rgba(255,255,255,0.12)"/>
+            </marker>
+            <marker id="arrowBlue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 z" fill="#3b82f6"/>
+            </marker>
+            <marker id="arrowGreen" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 z" fill="#10b981"/>
+            </marker>
+            <marker id="arrowRed" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 z" fill="#ef4444"/>
+            </marker>
+            <marker id="arrowAmber" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 z" fill="#f59e0b"/>
+            </marker>
+            <marker id="arrowPurple" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 z" fill="#8b5cf6"/>
+            </marker>
+          </defs>
+
+          <!-- START -->
+          <rect id="nodeStart" x="141" y="2" width="58" height="18" rx="9"
+                fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+          <text x="170" y="14.5" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="7.5" font-weight="800" font-family="sans-serif">START</text>
+
+          <!-- START → SUPERVISOR -->
+          <line id="lineStartSup" x1="170" y1="20" x2="170" y2="44"
+                stroke="rgba(255,255,255,0.35)" stroke-width="1.8" marker-end="url(#arrowDim)"/>
+
+          <!-- LONG-TERM MEMORY (left of supervisor) -->
+          <rect id="nodeMemory" x="2" y="50" width="82" height="32" rx="8"
+                fill="rgba(139,92,246,0.07)" stroke="rgba(139,92,246,0.2)" stroke-width="1"/>
+          <text x="43" y="61" text-anchor="middle" fill="rgba(139,92,246,0.75)" font-size="8" font-weight="700" font-family="sans-serif">💾 LONG-TERM</text>
+          <text x="43" y="71" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="6" font-family="sans-serif">Past Orders &amp; Prefs</text>
+          <text id="ltmSaved" x="43" y="80" text-anchor="middle" fill="rgba(16,185,129,0)" font-size="6" font-weight="700" font-family="sans-serif">✓ SAVED</text>
+          <!-- LONG-TERM → SUPERVISOR dashed line -->
+          <path id="pathMemory" d="M84,66 C90,66 93,64 96,64"
+                fill="none" stroke="rgba(139,92,246,0.22)" stroke-width="1"
+                stroke-dasharray="3,2" marker-end="url(#arrowDim)"/>
+
+          <!-- SHORT-TERM MEMORY (right of supervisor) -->
+          <rect id="nodeShortTerm" x="258" y="50" width="80" height="32" rx="8"
+                fill="rgba(59,130,246,0.07)" stroke="rgba(59,130,246,0.2)" stroke-width="1"/>
+          <text x="298" y="61" text-anchor="middle" fill="rgba(59,130,246,0.75)" font-size="8" font-weight="700" font-family="sans-serif">🔵 SHORT-TERM</text>
+          <text x="298" y="71" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="6" font-family="sans-serif">Session Context</text>
+          <text id="stmCount" x="298" y="80" text-anchor="middle" fill="rgba(59,130,246,0.5)" font-size="6" font-family="sans-serif">0 msgs</text>
+          <!-- SHORT-TERM → SUPERVISOR dashed line -->
+          <path id="pathShortTerm" d="M258,66 C252,66 248,64 244,64"
+                fill="none" stroke="rgba(59,130,246,0.22)" stroke-width="1"
+                stroke-dasharray="3,2" marker-end="url(#arrowDim)"/>
+
+          <!-- SUPERVISOR -->
+          <rect id="supRect" x="96" y="46" width="148" height="36" rx="9"
+                fill="rgba(139,92,246,0.1)" stroke="rgba(139,92,246,0.28)" stroke-width="1.2"/>
+          <text x="170" y="61" text-anchor="middle" fill="rgba(139,92,246,0.85)" font-size="9.5" font-weight="700" font-family="sans-serif">🧠 SUPERVISOR</text>
+          <text x="170" y="74" text-anchor="middle" fill="rgba(255,255,255,0.28)" font-size="7.5" font-family="sans-serif">Intent Classifier</text>
+
+          <!-- SUPERVISOR → GUARDRAILS (animated line) -->
+          <path id="lineSupGuard" d="M170,82 L170,93"
+                fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.8" marker-end="url(#arrowDim)"/>
+
+          <!-- GUARDRAILS NODE -->
+          <rect id="guardRect" x="108" y="93" width="124" height="28" rx="8"
+                fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+          <text id="guardIcon" x="170" y="106" text-anchor="middle" fill="rgba(255,255,255,0.65)" font-size="9.5" font-weight="700" font-family="sans-serif">🛡️ GUARDRAILS</text>
+          <text id="guardTextSub" x="170" y="116" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="7" font-family="sans-serif">Content &amp; Safety Filter</text>
+
+          <!-- GUARDRAILS → END (blocked path, shows only on fail) -->
+          <path id="pathGuardBlocked" d="M170,121 L170,246"
+                fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+
+          <!-- GUARDRAILS → agents (curved paths) -->
+          <path id="pathOrder"
+                d="M133,121 C133,132 42,132 42,143"
+                fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"
+                marker-end="url(#arrowDim)"/>
+          <path id="pathPolicy"
+                d="M158,121 C158,132 127,132 127,143"
+                fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"
+                marker-end="url(#arrowDim)"/>
+          <path id="pathEsc"
+                d="M182,121 C182,132 212,132 212,143"
+                fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"
+                marker-end="url(#arrowDim)"/>
+          <path id="pathChat"
+                d="M207,121 C207,132 297,132 297,143"
+                fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"
+                marker-end="url(#arrowDim)"/>
+
+          <!-- AGENT NODES -->
+          <rect id="nodeOrder" x="5" y="143" width="74" height="32" rx="8"
+                fill="rgba(59,130,246,0.07)" stroke="rgba(59,130,246,0.2)" stroke-width="1"/>
+          <text x="42" y="156" text-anchor="middle" fill="rgba(59,130,246,0.75)" font-size="9" font-weight="700" font-family="sans-serif">📦 Order</text>
+          <text x="42" y="167" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="7" font-family="sans-serif">Lookup Agent</text>
+
+          <rect id="nodePolicy" x="90" y="143" width="74" height="32" rx="8"
+                fill="rgba(16,185,129,0.07)" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
+          <text x="127" y="156" text-anchor="middle" fill="rgba(16,185,129,0.75)" font-size="9" font-weight="700" font-family="sans-serif">📋 Policy</text>
+          <text x="127" y="167" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="7" font-family="sans-serif">RAG Agent</text>
+
+          <rect id="nodeEsc" x="175" y="143" width="74" height="32" rx="8"
+                fill="rgba(239,68,68,0.07)" stroke="rgba(239,68,68,0.2)" stroke-width="1"/>
+          <text x="212" y="156" text-anchor="middle" fill="rgba(239,68,68,0.75)" font-size="9" font-weight="700" font-family="sans-serif">🚨 Escalation</text>
+          <text x="212" y="167" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="7" font-family="sans-serif">Human Handoff</text>
+
+          <rect id="nodeChat" x="260" y="143" width="74" height="32" rx="8"
+                fill="rgba(245,158,11,0.07)" stroke="rgba(245,158,11,0.2)" stroke-width="1"/>
+          <text x="297" y="156" text-anchor="middle" fill="rgba(245,158,11,0.75)" font-size="9" font-weight="700" font-family="sans-serif">💬 Chitchat</text>
+          <text x="297" y="167" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="7" font-family="sans-serif">Casual Agent</text>
+
+          <!-- Paths: order / policy / chitchat → POLICY CHECK (more breathing room) -->
+          <path id="pathOrderCheck"
+                d="M42,175 C42,190 95,197 110,197"
+                fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"
+                marker-end="url(#arrowDim)"/>
+          <path id="pathPolicyCheck"
+                d="M127,175 C127,190 143,197 148,197"
+                fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"
+                marker-end="url(#arrowDim)"/>
+          <path id="pathChatCheck"
+                d="M297,175 C297,190 242,197 235,197"
+                fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"
+                marker-end="url(#arrowDim)"/>
+
+          <!-- Escalation → END bypass (red dashed, clearly labeled) -->
+          <path id="pathEscEnd"
+                d="M212,175 C212,222 192,246 188,246"
+                fill="none" stroke="rgba(239,68,68,0.3)" stroke-width="1.5"
+                stroke-dasharray="4,2.5" marker-end="url(#arrowRed)"/>
+
+          <!-- POLICY CHECK NODE -->
+          <rect id="nodeCheck" x="83" y="197" width="174" height="26" rx="8"
+                fill="rgba(245,158,11,0.07)" stroke="rgba(245,158,11,0.22)" stroke-width="1.2"/>
+          <text id="checkIcon" x="170" y="210" text-anchor="middle" fill="rgba(245,158,11,0.85)" font-size="8.5" font-weight="700" font-family="sans-serif">🔍 POLICY CHECK</text>
+          <text x="170" y="219" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="6.5" font-family="sans-serif">Response Compliance Gate</text>
+
+          <!-- POLICY CHECK → END -->
+          <path id="pathCheckEnd"
+                d="M170,223 L170,246"
+                fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.8"
+                marker-end="url(#arrowDim)"/>
+
+          <!-- END -->
+          <rect id="nodeEnd" x="141" y="246" width="58" height="18" rx="9"
+                fill="rgba(16,185,129,0.12)" stroke="rgba(16,185,129,0.5)" stroke-width="1.5"/>
+          <text x="170" y="258.5" text-anchor="middle" fill="rgba(16,185,129,0.85)" font-size="7.5" font-weight="800" font-family="sans-serif">END</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="input-area">
+      <textarea class="chat-input" id="chatInput" rows="1"
+                placeholder="Ask me anything about your order…"
+                onkeydown="handleKey(event)"
+                oninput="autoGrow(this)"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+      <button class="done-btn" id="doneBtn" onclick="endSession()" title="End session — saves to long-term memory">
+        ✓ Done
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   PRODUCTS
+═══════════════════════════════════════════ */
+const PRODUCTS = [
+  { name:"Wireless Headphones",  price:89.99,  old:119.99, emoji:"🎧", cat:"Audio",       stars:"★★★★★", reviews:2841, badge:"Bestseller", badgeCls:"badge-blue"  },
+  { name:"Phone Case",           price:14.99,  old:null,   emoji:"📱", cat:"Accessories", stars:"★★★★☆", reviews:512,  badge:null,          badgeCls:""            },
+  { name:"USB-C Hub 7-in-1",     price:34.99,  old:49.99,  emoji:"🔌", cat:"Connectivity",stars:"★★★★★", reviews:1203, badge:"Sale",         badgeCls:"badge-red"   },
+  { name:"Laptop Stand Pro",     price:45.00,  old:null,   emoji:"💻", cat:"Ergonomics",  stars:"★★★★☆", reviews:789,  badge:null,          badgeCls:""            },
+  { name:"Mechanical Keyboard",  price:120.00, old:149.00, emoji:"⌨️", cat:"Peripherals", stars:"★★★★★", reviews:3201, badge:"Hot",          badgeCls:"badge-red"   },
+  { name:"Webcam HD 1080p",      price:59.99,  old:null,   emoji:"📷", cat:"Video",       stars:"★★★★☆", reviews:644,  badge:"New",          badgeCls:"badge-green" },
+  { name:"Desk Lamp LED",        price:29.99,  old:39.99,  emoji:"💡", cat:"Lighting",    stars:"★★★★★", reviews:1100, badge:null,          badgeCls:""            },
+  { name:'Monitor 27"',          price:299.99, old:369.00, emoji:"🖥️", cat:"Displays",    stars:"★★★★★", reviews:892,  badge:"Premium",      badgeCls:"badge-amber" },
+];
+
+const BG = [
+  "linear-gradient(135deg,#0f2744,#1e3a5f)",
+  "linear-gradient(135deg,#1a1a2e,#2d1b69)",
+  "linear-gradient(135deg,#0d2137,#1a3a5c)",
+  "linear-gradient(135deg,#1c1917,#292524)",
+  "linear-gradient(135deg,#14532d,#166534)",
+  "linear-gradient(135deg,#450a0a,#7f1d1d)",
+  "linear-gradient(135deg,#1e1b4b,#312e81)",
+  "linear-gradient(135deg,#0c4a6e,#0369a1)",
+];
+
+let cartCount = 0;
+const grid = document.getElementById('productsGrid');
+
+PRODUCTS.forEach((p, i) => {
+  const badgeHtml = p.badge
+    ? `<span class="badge-pill ${p.badgeCls}">${p.badge}</span>`
+    : '';
+  const oldHtml = p.old
+    ? `<span class="product-old">$${p.old.toFixed(2)}</span>`
+    : '';
+  grid.innerHTML += `
+    <div class="product-card">
+      <div class="product-img" style="background:${BG[i]}">
+        ${p.emoji}
+        ${badgeHtml}
+        <button class="wishlist-btn" title="Wishlist">♡</button>
+      </div>
+      <div class="product-body">
+        <div class="product-cat">${p.cat}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-rating">${p.stars} <span class="rating-count">(${p.reviews.toLocaleString()})</span></div>
+        <div class="product-footer">
+          <div class="product-prices">
+            <span class="product-price">$${p.price.toFixed(2)}</span>${oldHtml}
+          </div>
+          <button class="add-btn" onclick="addCart(event)" title="Add to cart">+</button>
+        </div>
+      </div>
+    </div>`;
+});
+
+function addCart(e) {
+  e.stopPropagation();
+  cartCount++;
+  document.getElementById('cartCount').textContent = `(${cartCount})`;
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+/* ═══════════════════════════════════════════
+   CHAT STATE
+═══════════════════════════════════════════ */
+let sessionId = null;
+let busy = false;
+let panelOpen = false;
+let msgCount = 0;  // short-term message counter
+
+function toggleChat() {
+  panelOpen = !panelOpen;
+  document.getElementById('chatPanel').classList.toggle('open', panelOpen);
+}
+
+let isFullscreen = false;
+function toggleFullscreen() {
+  isFullscreen = !isFullscreen;
+  const panel = document.getElementById('chatPanel');
+  const btn   = document.getElementById('expandBtn');
+  panel.classList.toggle('fullscreen', isFullscreen);
+  // Swap icon: expand ↔ compress
+  btn.innerHTML = isFullscreen
+    ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px">
+        <polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/>
+        <line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/>
+       </svg>`
+    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px">
+        <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+        <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+       </svg>`;
+  btn.title = isFullscreen ? 'Collapse' : 'Expand';
+}
+
+async function startChat(skip = false) {
+  const orderId = skip ? '' : document.getElementById('orderIdInput').value.trim();
+  const btn = document.getElementById('startBtn');
+  btn.textContent = 'Connecting…';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/start', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ customer_id: orderId })
+    });
+    const data = await res.json();
+    sessionId = data.session_id;
+    msgCount = 1;
+    updateStmCounter();
+    document.getElementById('orderScreen').classList.add('gone');
+    document.getElementById('chatScreen').classList.remove('gone');
+    appendBotMsg(data.greeting);
+    document.getElementById('chatInput').focus();
+    // re-enable input in case of a new session after Done
+    document.getElementById('chatInput').disabled = false;
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('doneBtn').disabled = false;
+    document.getElementById('doneBtn').textContent = '✓ Done';
+    document.getElementById('doneBtn').style.display = '';
+  } catch {
+    btn.textContent = 'Start Chat →';
+    btn.disabled = false;
+    alert('Could not connect. Make sure the server is running (python app.py).');
+  }
+}
+
+async function sendMessage() {
+  if (busy) return;
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  autoGrow(input);
+
+  appendUserMsg(text);
+  msgCount += 2; // user msg + upcoming bot reply
+  updateStmCounter();
+  const typingId = showTyping();
+  busy = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  // Animate supervisor thinking
+  setSupervisorActive(true);
+  setRoutingStatus('🧠 Analyzing…');
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ session_id: sessionId, message: text })
+    });
+    const data = await res.json();
+    removeTyping(typingId);
+
+    if (data.error) {
+      appendBotMsg('⚠️ ' + data.error);
+      resetRouting();
+      setRoutingStatus('Error');
+    } else {
+      await animateRouting(data.intent, data.agent_color, data.guardrail_triggered);
+      appendBotMsg(data.response, data.intent, data.agent_label, data.agent_color, data.agent_icon);
+      if (!data.guardrail_triggered) {
+        setRoutingStatus(data.agent_icon + ' ' + data.agent_label);
+      }
+    }
+  } catch {
+    removeTyping(typingId);
+    appendBotMsg('Connection error. Please try again.');
+    resetRouting();
+    setRoutingStatus('Error');
+  }
+
+  busy = false;
+  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('chatInput').focus();
+}
+
+/* ═══════════════════════════════════════════
+   SESSION END
+═══════════════════════════════════════════ */
+async function endSession() {
+  if (!sessionId || busy) return;
+  const btn = document.getElementById('doneBtn');
+  btn.disabled = true;
+  btn.textContent = '💾 Saving…';
+
+  // Animate long-term memory save in graph
+  setRoutingStatus('💾 Saving to long-term memory…');
+  setMemoryActive(true);
+
+  try {
+    await fetch('/api/end', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ session_id: sessionId })
+    });
+  } catch { /* best effort */ }
+
+  await sleep(600);
+  // Flash "SAVED" label on long-term node
+  const savedLabel = document.getElementById('ltmSaved');
+  if (savedLabel) {
+    savedLabel.setAttribute('fill', '#10b981');
+    await sleep(1800);
+    savedLabel.setAttribute('fill', 'rgba(16,185,129,0)');
+  }
+  setMemoryActive(false);
+
+  // Fade out short-term node to show session cleared
+  setShortTermActive(false, true);
+  setRoutingStatus('✅ Session saved');
+
+  // Show in-chat system message
+  appendSystemMsg('✅ Session ended — conversation saved to long-term memory.');
+
+  // Disable input
+  document.getElementById('chatInput').disabled = true;
+  document.getElementById('sendBtn').disabled = true;
+  btn.style.display = 'none';
+
+  // Update header status
+  const statusEl = document.querySelector('.bot-meta-status');
+  statusEl.innerHTML = '<span style="color:#f59e0b;display:flex;align-items:center;gap:0.3rem;"><span style="width:5px;height:5px;background:#f59e0b;border-radius:50%;display:inline-block;"></span>Session ended</span>';
+
+  sessionId = null;
+}
+
+/* ═══════════════════════════════════════════
+   MESSAGE HELPERS
+═══════════════════════════════════════════ */
+function appendBotMsg(text, intent, label, color, icon) {
+  const area = document.getElementById('msgsArea');
+  const row = document.createElement('div');
+  row.className = 'msg-row bot';
+
+  let tagHtml = '';
+  if (intent && label && color) {
+    tagHtml = `<div class="msg-agent-tag" style="background:${color}22;color:${color};border:1px solid ${color}44;">${icon} ${label}</div>`;
+  }
+
+  // simple markdown bold: **text** → <strong>text</strong>
+  const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+
+  row.innerHTML = `
+    <div class="msg-ava bot">🤖</div>
+    <div class="msg-content">
+      ${tagHtml}
+      <div class="msg-bubble">${formatted}</div>
+    </div>`;
+  area.appendChild(row);
+  area.scrollTop = area.scrollHeight;
+}
+
+function appendUserMsg(text) {
+  const area = document.getElementById('msgsArea');
+  const row = document.createElement('div');
+  row.className = 'msg-row user';
+  row.innerHTML = `
+    <div class="msg-ava user-av">👤</div>
+    <div class="msg-content">
+      <div class="msg-bubble">${escHtml(text)}</div>
+    </div>`;
+  area.appendChild(row);
+  area.scrollTop = area.scrollHeight;
+}
+
+function showTyping() {
+  const area = document.getElementById('msgsArea');
+  const id = 'typ-' + Date.now();
+  const row = document.createElement('div');
+  row.className = 'msg-row bot';
+  row.id = id;
+  row.innerHTML = `
+    <div class="msg-ava bot">🤖</div>
+    <div class="typing-bubble">
+      <div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div>
+    </div>`;
+  area.appendChild(row);
+  area.scrollTop = area.scrollHeight;
+  return id;
+}
+
+function removeTyping(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+function escHtml(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function appendSystemMsg(text) {
+  const area = document.getElementById('msgsArea');
+  const div = document.createElement('div');
+  div.className = 'msg-system';
+  div.innerHTML = `<div class="msg-system-inner success">${text}</div>
+    <button class="new-session-btn" onclick="resetChat()">+ Start new session</button>`;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function resetChat() {
+  document.getElementById('chatScreen').classList.add('gone');
+  document.getElementById('orderScreen').classList.remove('gone');
+  document.getElementById('msgsArea').innerHTML = '';
+  document.getElementById('orderIdInput').value = '';
+  document.getElementById('startBtn').textContent = 'Start Chat →';
+  document.getElementById('startBtn').disabled = false;
+  msgCount = 0;
+  updateStmCounter();
+  resetRouting();
+  setRoutingStatus('Standby');
+  document.querySelector('.bot-meta-status').innerHTML =
+    '<div class="status-dot"></div>AI-Powered · LangGraph';
+}
+
+function updateStmCounter() {
+  const el = document.getElementById('stmCount');
+  if (el) el.textContent = msgCount > 0 ? `${msgCount} msg${msgCount !== 1 ? 's' : ''}` : '0 msgs';
+}
+
+function setShortTermActive(on, faded = false) {
+  const rect = document.getElementById('nodeShortTerm');
+  const path = document.getElementById('pathShortTerm');
+  if (!rect || !path) return;
+  if (on) {
+    rect.style.fill        = 'rgba(59,130,246,0.28)';
+    rect.style.stroke      = '#3b82f6';
+    rect.style.strokeWidth = '1.8';
+    rect.style.filter      = 'url(#softGlow)';
+    path.setAttribute('stroke', '#3b82f6');
+    path.setAttribute('stroke-width', '1.8');
+    path.removeAttribute('stroke-dasharray');
+    path.style.filter      = 'url(#softGlow)';
+  } else {
+    rect.style.fill        = faded ? 'rgba(59,130,246,0.03)' : '';
+    rect.style.stroke      = faded ? 'rgba(59,130,246,0.1)' : '';
+    rect.style.strokeWidth = '';
+    rect.style.filter      = '';
+    path.setAttribute('stroke', faded ? 'rgba(59,130,246,0.1)' : 'rgba(59,130,246,0.22)');
+    path.setAttribute('stroke-width', '1');
+    path.setAttribute('stroke-dasharray', '3,2');
+    path.style.filter      = '';
+  }
+}
+
+/* ═══════════════════════════════════════════
+   ROUTING VISUALIZATION
+═══════════════════════════════════════════ */
+const AGENT_CFG = {
+  order_lookup: { pathId:'pathOrder',  nodeId:'nodeOrder',  color:'#3b82f6', marker:'arrowBlue',  checkPathId:'pathOrderCheck'  },
+  policy:       { pathId:'pathPolicy', nodeId:'nodePolicy', color:'#10b981', marker:'arrowGreen', checkPathId:'pathPolicyCheck' },
+  escalation:   { pathId:'pathEsc',    nodeId:'nodeEsc',    color:'#ef4444', marker:'arrowRed',   checkPathId:null              },
+  chitchat:     { pathId:'pathChat',   nodeId:'nodeChat',   color:'#f59e0b', marker:'arrowAmber', checkPathId:'pathChatCheck'   },
+};
+
+function setRoutingStatus(txt) {
+  document.getElementById('routingStatus').textContent = txt;
+}
+
+function setSupervisorActive(on) {
+  const el = document.getElementById('supRect');
+  if (on) {
+    el.style.fill        = 'rgba(139,92,246,0.25)';
+    el.style.stroke      = '#8b5cf6';
+    el.style.strokeWidth = '2';
+    el.style.filter      = 'url(#softGlow)';
+  } else {
+    el.style.fill        = 'rgba(139,92,246,0.1)';
+    el.style.stroke      = 'rgba(139,92,246,0.28)';
+    el.style.strokeWidth = '1.2';
+    el.style.filter      = '';
+  }
+}
+
+function setGuardrailState(state) {
+  const rect    = document.getElementById('guardRect');
+  const icon    = document.getElementById('guardIcon');
+  const blocked = document.getElementById('pathGuardBlocked');
+  if (state === 'pass') {
+    rect.style.fill        = 'rgba(16,185,129,0.22)';
+    rect.style.stroke      = '#10b981';
+    rect.style.strokeWidth = '2';
+    rect.style.filter      = 'url(#softGlow)';
+    icon.textContent       = '✅ GUARDRAILS';
+    icon.setAttribute('fill', '#10b981');
+    blocked.setAttribute('stroke', 'rgba(255,255,255,0.04)');
+    blocked.style.filter   = '';
+  } else if (state === 'fail') {
+    rect.style.fill        = 'rgba(239,68,68,0.22)';
+    rect.style.stroke      = '#ef4444';
+    rect.style.strokeWidth = '2';
+    rect.style.filter      = 'url(#glow)';
+    icon.textContent       = '❌ BLOCKED';
+    icon.setAttribute('fill', '#ef4444');
+    // Animate blocked path downward to END
+    const len = blocked.getTotalLength();
+    blocked.style.transition       = 'none';
+    blocked.setAttribute('stroke', '#ef4444');
+    blocked.setAttribute('stroke-width', '2.5');
+    blocked.style.filter           = 'url(#softGlow)';
+    blocked.style.strokeDasharray  = `${len}`;
+    blocked.style.strokeDashoffset = `${len}`;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        blocked.style.transition       = 'stroke-dashoffset 0.4s ease-in-out';
+        blocked.style.strokeDashoffset = '0';
+      });
+    });
+  } else {
+    // idle
+    rect.style.fill        = '';
+    rect.style.stroke      = '';
+    rect.style.strokeWidth = '';
+    rect.style.filter      = '';
+    icon.textContent       = '🛡️ GUARDRAILS';
+    icon.setAttribute('fill', 'rgba(255,255,255,0.65)');
+    blocked.setAttribute('stroke', 'rgba(255,255,255,0.04)');
+    blocked.setAttribute('stroke-width', '1.5');
+    blocked.style.filter           = '';
+    blocked.style.strokeDasharray  = '';
+    blocked.style.strokeDashoffset = '';
+    blocked.style.transition       = '';
+  }
+}
+
+function setMemoryActive(on) {
+  const rect = document.getElementById('nodeMemory');
+  const path = document.getElementById('pathMemory');
+  if (!rect || !path) return;
+  if (on) {
+    rect.style.fill        = 'rgba(139,92,246,0.28)';
+    rect.style.stroke      = '#8b5cf6';
+    rect.style.strokeWidth = '1.8';
+    rect.style.filter      = 'url(#softGlow)';
+    path.setAttribute('stroke', '#8b5cf6');
+    path.setAttribute('stroke-width', '1.8');
+    path.removeAttribute('stroke-dasharray');
+    path.style.filter      = 'url(#softGlow)';
+  } else {
+    rect.style.fill        = '';
+    rect.style.stroke      = '';
+    rect.style.strokeWidth = '';
+    rect.style.filter      = '';
+    path.setAttribute('stroke', 'rgba(139,92,246,0.22)');
+    path.setAttribute('stroke-width', '1');
+    path.setAttribute('stroke-dasharray', '3,2');
+    path.style.filter      = '';
+  }
+}
+
+function setPolicyCheckActive(state) {
+  const node = document.getElementById('nodeCheck');
+  const icon = document.getElementById('checkIcon');
+  if (!node) return;
+  if (state === 'pass') {
+    node.style.fill        = 'rgba(16,185,129,0.22)';
+    node.style.stroke      = '#10b981';
+    node.style.strokeWidth = '2';
+    node.style.filter      = 'url(#softGlow)';
+    if (icon) { icon.textContent = '✅ POLICY CHECK'; icon.setAttribute('fill','#10b981'); }
+  } else if (state === 'fail') {
+    node.style.fill        = 'rgba(239,68,68,0.22)';
+    node.style.stroke      = '#ef4444';
+    node.style.strokeWidth = '2';
+    node.style.filter      = 'url(#glow)';
+    if (icon) { icon.textContent = '❌ POLICY BLOCKED'; icon.setAttribute('fill','#ef4444'); }
+  } else {
+    node.style.fill        = '';
+    node.style.stroke      = '';
+    node.style.strokeWidth = '';
+    node.style.filter      = '';
+    if (icon) { icon.textContent = '🔍 POLICY CHECK'; icon.setAttribute('fill','rgba(245,158,11,0.85)'); }
+  }
+}
+
+function resetRouting() {
+  setSupervisorActive(false);
+  setMemoryActive(false);
+  setShortTermActive(false);
+  setGuardrailState('idle');
+  setPolicyCheckActive(null);
+  // Reset supervisor → guardrails line
+  // Reset START node and line
+  const startNode = document.getElementById('nodeStart');
+  if (startNode) { startNode.style.fill=''; startNode.style.stroke=''; startNode.style.strokeWidth=''; startNode.style.filter=''; }
+  const startLine = document.getElementById('lineStartSup');
+  if (startLine) {
+    startLine.setAttribute('stroke','rgba(255,255,255,0.35)');
+    startLine.setAttribute('stroke-width','1.8');
+    startLine.setAttribute('marker-end','url(#arrowDim)');
+    startLine.style.filter=''; startLine.style.strokeDasharray=''; startLine.style.strokeDashoffset=''; startLine.style.transition='';
+  }
+  const sg = document.getElementById('lineSupGuard');
+  sg.setAttribute('stroke', 'rgba(255,255,255,0.35)');
+  sg.setAttribute('stroke-width', '1.8');
+  sg.setAttribute('marker-end', 'url(#arrowDim)');
+  sg.style.filter           = '';
+  sg.style.strokeDasharray  = '';
+  sg.style.strokeDashoffset = '';
+  sg.style.transition       = '';
+  ['pathOrder','pathPolicy','pathEsc','pathChat'].forEach(id => {
+    const el = document.getElementById(id);
+    el.setAttribute('stroke','rgba(255,255,255,0.22)');
+    el.setAttribute('stroke-width','1.5');
+    el.setAttribute('marker-end','url(#arrowDim)');
+    el.style.filter           = '';
+    el.style.strokeDasharray  = '';
+    el.style.strokeDashoffset = '';
+  });
+  ['nodeOrder','nodePolicy','nodeEsc','nodeChat'].forEach(id => {
+    const el = document.getElementById(id);
+    el.style.fill        = '';
+    el.style.stroke      = '';
+    el.style.strokeWidth = '';
+    el.style.filter      = '';
+  });
+  const endNode = document.getElementById('nodeEnd');
+  if (endNode) { endNode.style.fill = ''; endNode.style.stroke = ''; endNode.style.strokeWidth = ''; endNode.style.filter = ''; }
+  ['pathOrderCheck','pathPolicyCheck','pathChatCheck'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.setAttribute('stroke', 'rgba(255,255,255,0.2)');
+    el.setAttribute('stroke-width', '1.5');
+    el.setAttribute('marker-end', 'url(#arrowDim)');
+    el.style.filter=''; el.style.strokeDasharray=''; el.style.strokeDashoffset=''; el.style.transition='';
+  });
+  const checkEnd = document.getElementById('pathCheckEnd');
+  if (checkEnd) {
+    checkEnd.setAttribute('stroke', 'rgba(255,255,255,0.3)');
+    checkEnd.setAttribute('stroke-width', '1.8');
+    checkEnd.setAttribute('marker-end', 'url(#arrowDim)');
+    checkEnd.style.filter=''; checkEnd.style.strokeDasharray=''; checkEnd.style.strokeDashoffset=''; checkEnd.style.transition='';
+  }
+  // dummy forEach to satisfy the next closing
+  [].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.setAttribute('stroke', 'rgba(255,255,255,0.2)');
+    el.setAttribute('stroke-width', '1.5');
+    el.setAttribute('marker-end', 'url(#arrowDim)');
+    el.style.filter           = '';
+    el.style.strokeDasharray  = '';
+    el.style.strokeDashoffset = '';
+    el.style.transition       = '';
+  });
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function animateRouting(intent, color, guardrailTriggered) {
+  resetRouting();
+
+  // Step 0 – START node glows, arrow animates down to Supervisor
+  const startNode = document.getElementById('nodeStart');
+  if (startNode) {
+    startNode.style.fill        = 'rgba(255,255,255,0.28)';
+    startNode.style.stroke      = '#fff';
+    startNode.style.strokeWidth = '2.5';
+    startNode.style.filter      = 'url(#softGlow)';
+  }
+  const startLine = document.getElementById('lineStartSup');
+  if (startLine) {
+    const dx = 170 - 170, dy = 44 - 20;   // x1=170 y1=20 → x2=170 y2=44
+    const sLen = Math.sqrt(dx*dx + dy*dy);
+    startLine.style.transition       = 'none';
+    startLine.setAttribute('stroke', '#8b5cf6');
+    startLine.setAttribute('stroke-width', '2');
+    startLine.setAttribute('marker-end', 'url(#arrowPurple)');
+    startLine.style.filter           = 'url(#softGlow)';
+    startLine.style.strokeDasharray  = `${sLen}`;
+    startLine.style.strokeDashoffset = `${sLen}`;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        startLine.style.transition       = 'stroke-dashoffset 0.28s ease-in-out';
+        startLine.style.strokeDashoffset = '0';
+      });
+    });
+  }
+  setRoutingStatus('🚀 Request received…');
+  await sleep(380);
+
+  // Step 1 – Memory read (both short-term and long-term) + Supervisor activates
+  setSupervisorActive(true);
+  setMemoryActive(true);
+  setShortTermActive(true);
+  setRoutingStatus('💾 Loading memory context…');
+  await sleep(260);
+  setMemoryActive(false);
+  setRoutingStatus('🔵 Reading session context…');
+  await sleep(220);
+  setShortTermActive(false);
+  setRoutingStatus('🧠 Analyzing intent…');
+  await sleep(200);
+
+  // Step 2 – Animate line from supervisor down to guardrails
+  const sg    = document.getElementById('lineSupGuard');
+  const sgLen = sg.getTotalLength();
+  sg.style.transition       = 'none';
+  sg.setAttribute('stroke', '#8b5cf6');
+  sg.setAttribute('stroke-width', '2');
+  sg.setAttribute('marker-end', 'url(#arrowPurple)');
+  sg.style.filter           = 'url(#softGlow)';
+  sg.style.strokeDasharray  = `${sgLen}`;
+  sg.style.strokeDashoffset = `${sgLen}`;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      sg.style.transition       = 'stroke-dashoffset 0.25s ease-in-out';
+      sg.style.strokeDashoffset = '0';
+    });
+  });
+  setRoutingStatus('🛡️ Checking guardrails…');
+  await sleep(380);
+
+  // Step 3 – Guardrail result
+  if (guardrailTriggered) {
+    setGuardrailState('fail');
+    setRoutingStatus('🚫 Blocked by Guardrails');
+    return;
+  }
+
+  setGuardrailState('pass');
+  setRoutingStatus('✅ Guardrails passed');
+  await sleep(350);
+
+  // Step 4 – Route to correct agent
+  const cfg = AGENT_CFG[intent];
+  if (!cfg) { setRoutingStatus('⚠️ Unknown'); return; }
+
+  setRoutingStatus('⚡ Routing to agent…');
+  const path = document.getElementById(cfg.pathId);
+  const len  = path.getTotalLength();
+  path.style.transition       = 'none';
+  path.setAttribute('stroke', cfg.color);
+  path.setAttribute('stroke-width', '2.5');
+  path.setAttribute('marker-end', `url(#${cfg.marker})`);
+  path.style.filter           = 'url(#softGlow)';
+  path.style.strokeDasharray  = `${len}`;
+  path.style.strokeDashoffset = `${len}`;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      path.style.transition       = 'stroke-dashoffset 0.45s ease-in-out';
+      path.style.strokeDashoffset = '0';
+    });
+  });
+
+  launchDot(path, cfg.color);
+  await sleep(550);
+
+  // Step 5 – Agent node lights up
+  const node = document.getElementById(cfg.nodeId);
+  node.style.fill        = cfg.color + '2a';
+  node.style.stroke      = cfg.color;
+  node.style.strokeWidth = '2';
+  node.style.filter      = 'url(#softGlow)';
+
+  // Step 6 – Policy check gate (escalation bypasses it)
+  if (cfg.checkPathId) {
+    await sleep(300);
+    setRoutingStatus('🔍 Checking response policy…');
+    const checkPath = document.getElementById(cfg.checkPathId);
+    const cLen = checkPath.getTotalLength();
+    checkPath.style.transition       = 'none';
+    checkPath.setAttribute('stroke', cfg.color);
+    checkPath.setAttribute('stroke-width', '2');
+    checkPath.setAttribute('marker-end', `url(#${cfg.marker})`);
+    checkPath.style.filter           = 'url(#softGlow)';
+    checkPath.style.strokeDasharray  = `${cLen}`;
+    checkPath.style.strokeDashoffset = `${cLen}`;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        checkPath.style.transition       = 'stroke-dashoffset 0.35s ease-in-out';
+        checkPath.style.strokeDashoffset = '0';
+      });
+    });
+    await sleep(450);
+    setPolicyCheckActive('pass');
+    setRoutingStatus('✅ Policy OK — delivering response');
+
+    // Animate pathCheckEnd (green arrow to END)
+    await sleep(220);
+    const endPath = document.getElementById('pathCheckEnd');
+    const eLen = endPath.getTotalLength();
+    endPath.style.transition       = 'none';
+    endPath.setAttribute('stroke', '#10b981');
+    endPath.setAttribute('stroke-width', '2');
+    endPath.setAttribute('marker-end', 'url(#arrowGreen)');
+    endPath.style.filter           = 'url(#softGlow)';
+    endPath.style.strokeDasharray  = `${eLen}`;
+    endPath.style.strokeDashoffset = `${eLen}`;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        endPath.style.transition       = 'stroke-dashoffset 0.25s ease-in-out';
+        endPath.style.strokeDashoffset = '0';
+      });
+    });
+    // Light up END node green
+    await sleep(300);
+    const endNode = document.getElementById('nodeEnd');
+    if (endNode) {
+      endNode.style.fill        = 'rgba(16,185,129,0.35)';
+      endNode.style.stroke      = '#10b981';
+      endNode.style.strokeWidth = '2.5';
+      endNode.style.filter      = 'url(#softGlow)';
+      setTimeout(() => {
+        endNode.style.fill        = '';
+        endNode.style.stroke      = '';
+        endNode.style.strokeWidth = '';
+        endNode.style.filter      = '';
+      }, 2800);
+    }
+  }
+}
+
+function launchDot(pathEl, color) {
+  const svg = document.getElementById('routeSvg');
+  const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  dot.setAttribute('r', '4');
+  dot.setAttribute('fill', color);
+  dot.style.filter = 'url(#glow)';
+  svg.appendChild(dot);
+
+  const total    = pathEl.getTotalLength();
+  const duration = 450;
+  let   t0       = null;
+
+  function step(ts) {
+    if (!t0) t0 = ts;
+    const p = Math.min((ts - t0) / duration, 1);
+    // ease in-out
+    const e = p < 0.5 ? 2*p*p : -1 + (4 - 2*p)*p;
+    const pt = pathEl.getPointAtLength(e * total);
+    dot.setAttribute('cx', pt.x);
+    dot.setAttribute('cy', pt.y);
+    if (p < 1) requestAnimationFrame(step);
+    else        setTimeout(() => dot.remove(), 300);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ═══════════════════════════════════════════
+   INPUT HELPERS
+═══════════════════════════════════════════ */
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoGrow(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 90) + 'px';
+}
+
+/* End session on page close */
+window.addEventListener('beforeunload', () => {
+  if (sessionId) navigator.sendBeacon('/api/end', JSON.stringify({ session_id: sessionId }));
+});
+</script>
+</body>
+</html>

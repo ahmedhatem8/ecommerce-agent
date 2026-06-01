@@ -85,25 +85,47 @@ def get_hybrid_chain():
         tokenized_query = query.lower().split()
         bm25_scores = bm25.get_scores(tokenized_query)
         top_bm25_indices = sorted(range(len(bm25_scores)),
-                                  key=lambda i: bm25_scores[i], reverse=True)[:3]
+                                  key=lambda i: bm25_scores[i], reverse=True)[:5]
         bm25_results = [chunks[i] for i in top_bm25_indices]
-        seen = set()
-        combined = []
+
+        # Reciprocal Rank Fusion: score each doc by its rank in both result lists
+        # Higher score = appeared near the top in more lists = more relevant
+        K = 60
+        rrf_scores = {}
+        for rank, doc in enumerate(dense_results):
+            key = doc.page_content
+            rrf_scores[key] = rrf_scores.get(key, 0) + 1.0 / (rank + K)
+        for rank, doc in enumerate(bm25_results):
+            key = doc.page_content
+            rrf_scores[key] = rrf_scores.get(key, 0) + 1.0 / (rank + K)
+
+        # Collect unique docs and sort by combined RRF score descending
+        seen = {}
         for doc in dense_results + bm25_results:
             if doc.page_content not in seen:
-                seen.add(doc.page_content)
-                combined.append(doc)
-        return combined[:4]
+                seen[doc.page_content] = doc
+        ranked = sorted(seen.values(),
+                        key=lambda d: rrf_scores.get(d.page_content, 0),
+                        reverse=True)
+
+        # Drop chunks whose RRF score is below 65% of the top chunk's score.
+        # Weak matches that only appeared in one retrieval list get cut here.
+        if ranked:
+            top_score = rrf_scores.get(ranked[0].page_content, 0.001)
+            min_score = top_score * 0.65
+            ranked = [d for d in ranked if rrf_scores.get(d.page_content, 0) >= min_score]
+
+        return ranked[:3] if ranked else []
 
     llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
     prompt = ChatPromptTemplate.from_template("""
-You are a helpful customer support agent for NovaMart.
-Answer the question based only on the context below.
+    You are a helpful customer support agent for NovaMart.
+    Answer the question based only on the context below.
 
-Context: {context}
+    Context: {context}
 
-Question: {question}
-""")
+    Question: {question}
+    """)
 
     def hybrid_chain(query):
         docs = hybrid_retrieve(query)

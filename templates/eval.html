@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NovaMart — AI Eval Dashboard</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --navy:      #1e293b;
+      --navy-deep: #0f172a;
+      --blue:      #3b82f6;
+      --green:     #10b981;
+      --red:       #ef4444;
+      --amber:     #f59e0b;
+      --purple:    #8b5cf6;
+      --teal:      #06b6d4;
+      --gray-50:   #f8fafc;
+      --gray-100:  #f1f5f9;
+      --gray-200:  #e2e8f0;
+      --gray-400:  #94a3b8;
+      --gray-600:  #475569;
+      --gray-700:  #334155;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-700);
+      line-height: 1.5;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 100%);
+      color: white;
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-left h1 { font-size: 1.5rem; font-weight: 700; }
+    .header-left p  { color: rgba(255,255,255,0.55); font-size: 0.85rem; margin-top: 2px; }
+    .header-right { display: flex; gap: 10px; align-items: center; }
+    .badge {
+      background: rgba(16,185,129,0.2);
+      color: #6ee7b7;
+      border: 1px solid rgba(16,185,129,0.35);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .btn-link {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-size: 0.83rem;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-link:hover { background: rgba(255,255,255,0.18); }
+
+    /* ── LAYOUT ── */
+    .page { max-width: 1200px; margin: 0 auto; padding: 28px 24px 60px; }
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title span { font-size: 1.1rem; }
+
+    /* ── METRIC CARDS ── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 32px;
+    }
+    .metric-card {
+      background: white;
+      border-radius: 16px;
+      padding: 26px 28px 22px;
+      border-top: 4px solid var(--blue);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .metric-card::after {
+      content: '';
+      position: absolute;
+      right: -24px; bottom: -24px;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      opacity: 0.06;
+      background: var(--accent-color, var(--blue));
+    }
+    .metric-card.green  { border-color: var(--green);  --accent-color: var(--green); }
+    .metric-card.blue   { border-color: var(--blue);   --accent-color: var(--blue); }
+    .metric-card.amber  { border-color: var(--amber);  --accent-color: var(--amber); }
+    .metric-card.purple { border-color: var(--purple); --accent-color: var(--purple); }
+    .metric-card.teal   { border-color: var(--teal);   --accent-color: var(--teal); }
+    .metric-card.red    { border-color: var(--red);    --accent-color: var(--red); }
+
+    .metric-icon { font-size: 1.4rem; margin-bottom: 4px; }
+    .metric-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+                    letter-spacing: 0.06em; color: var(--gray-400); margin-bottom: 2px; }
+    .metric-value { font-size: 2.4rem; font-weight: 800; color: var(--navy); line-height: 1.1; }
+    .metric-value.green  { color: var(--green); }
+    .metric-value.blue   { color: var(--blue); }
+    .metric-value.amber  { color: var(--amber); }
+    .metric-value.purple { color: var(--purple); }
+    .metric-value.teal   { color: var(--teal); }
+    .metric-sub { font-size: 0.8rem; color: var(--gray-400); margin-top: 2px; }
+
+    .metric-bar { margin-top: 14px; height: 5px; background: var(--gray-100);
+                  border-radius: 4px; overflow: hidden; }
+    .metric-bar-fill { height: 100%; border-radius: 4px;
+                       background: var(--accent-color, var(--blue)); transition: width 0.8s ease; }
+
+    /* ── CATEGORY BREAKDOWN ── */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .cat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    .cat-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--navy);
+                   margin-bottom: 14px; text-transform: capitalize; }
+    .cat-row { margin-bottom: 10px; }
+    .cat-row-label { display: flex; justify-content: space-between;
+                     font-size: 0.78rem; color: var(--gray-600); margin-bottom: 4px; }
+    .bar-bg { height: 6px; background: var(--gray-100); border-radius: 6px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease; }
+    .bar-green  { background: var(--green); }
+    .bar-blue   { background: var(--blue); }
+    .bar-amber  { background: var(--amber); }
+    .bar-purple { background: var(--purple); }
+
+    /* ── RETRIEVAL TABLE ── */
+    .table-wrap {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    thead th {
+      background: var(--navy);
+      color: rgba(255,255,255,0.8);
+      padding: 11px 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    tbody tr { border-bottom: 1px solid var(--gray-100); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--gray-50); }
+    td { padding: 10px 14px; color: var(--gray-700); }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .pill-pass   { background: rgba(16,185,129,0.12); color: #059669; }
+    .pill-warn   { background: rgba(245,158,11,0.12); color: #d97706; }
+    .pill-fail   { background: rgba(239,68,68,0.12);  color: #dc2626; }
+    .pill-error  { background: rgba(139,92,246,0.12); color: #7c3aed; }
+    .pill-happy  { background: rgba(59,130,246,0.12); color: #2563eb; }
+    .pill-edge   { background: rgba(245,158,11,0.12); color: #d97706; }
+    .pill-adv    { background: rgba(239,68,68,0.12);  color: #dc2626; }
+
+    .score-pip {
+      display: inline-flex; align-items: center; gap: 2px;
+    }
+    .pip { width: 7px; height: 7px; border-radius: 2px; background: var(--gray-200); }
+    .pip.on { background: var(--green); }
+    .pip.on.warn { background: var(--amber); }
+    .pip.on.fail { background: var(--red); }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .filter-btn {
+      background: white;
+      border: 1px solid var(--gray-200);
+      color: var(--gray-600);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      color: var(--gray-400);
+      font-size: 0.78rem;
+      padding-top: 24px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    @media (max-width: 640px) {
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+      .page { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="header">
+  <div class="header-left">
+    <h1>NovaMart AI Evaluation Dashboard</h1>
+    <p>30 synthetic test conversations &nbsp;·&nbsp; CSAI 422 Capstone</p>
+  </div>
+  <div class="header-right">
+    <span class="badge">Eval complete</span>
+    <a href="/" class="btn-link">Live Chat</a>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ── METRIC CARDS ── -->
+  <p class="section-title"><span>📊</span> Summary Metrics</p>
+  {% set s = data.summary %}
+  {% set n = s.total_tests - s.errors %}
+  <div class="metrics-grid">
+
+    <!-- Resolution Rate -->
+    {% set rr = (s.resolution_rate * 100) | round(1) %}
+    <div class="metric-card green">
+      <div class="metric-label">Resolution Rate</div>
+      <div class="metric-value green">{{ rr }}%</div>
+      <div class="metric-sub">Resolved without escalation</div>
+      <div class="metric-bar"><div class="metric-bar-fill" style="width:{{ rr }}%"></div></div>
+    </div>
+
+    <!-- Policy Compliance -->
+    {% set pc = ((s.policy_compliance_avg / 5) * 100) | round(1) %}
+    <div class="metric-card blue">
+      <div class="metric-label">Policy Compliance</div>
+      <div class="metric-value blue">{{ s.policy_compliance_avg }}<small style="font-size:1rem">/5</small></div>
+      <div class="metric-sub">LLM-as-judge avg score</div>
+      <div class="metric-bar"><div class="metric-bar-fill" style="width:{{ pc }}%"></div></div>
+    </div>
+
+    <!-- P95 Latency -->
+    {% set lat = (s.p95_latency_ms / 1000) | round(1) %}
+    {% set lat_color = 'green' if lat < 5 else ('amber' if lat < 15 else 'red') %}
+    <div class="metric-card {{ lat_color }}">
+      <div class="metric-label">P95 Latency</div>
+      <div class="metric-value {{ lat_color }}">{{ lat }}<small style="font-size:1rem">s</small></div>
+      <div class="metric-sub">End-to-end per turn</div>
+      <div class="metric-bar"><div class="metric-bar-fill" style="width:{{ [100, lat * 4] | min }}%"></div></div>
+    </div>
+
+    <!-- Context Precision -->
+    {% if s.context_precision is not none %}
+      {% set cp = (s.context_precision * 100) | round(1) %}
+    {% else %}
+      {% set cp = 'N/A' %}
+    {% endif %}
+    <div class="metric-card purple">
+      <div class="metric-label">Context Precision</div>
+      <div class="metric-value purple">{% if cp != 'N/A' %}{{ cp }}%{% else %}—{% endif %}</div>
+      <div class="metric-sub">Relevant chunks retrieved</div>
+      {% if cp != 'N/A' %}
+      <div class="metric-bar"><div class="metric-bar-fill" style="width:{{ cp }}%"></div></div>
+      {% endif %}
+    </div>
+
+    <!-- Context Recall -->
+    {% if s.context_recall is not none %}
+      {% set cr = (s.context_recall * 100) | round(1) %}
+    {% else %}
+      {% set cr = 'N/A' %}
+    {% endif %}
+    <div class="metric-card teal">
+      <div class="metric-label">Context Recall</div>
+      <div class="metric-value teal">{% if cr != 'N/A' %}{{ cr }}%{% else %}—{% endif %}</div>
+      <div class="metric-sub">Expected facts retrieved</div>
+      {% if cr != 'N/A' %}
+      <div class="metric-bar"><div class="metric-bar-fill" style="width:{{ cr }}%"></div></div>
+      {% endif %}
+    </div>
+
+    <!-- Tests ran -->
+    {% set err_color = 'green' if s.errors == 0 else 'amber' %}
+    <div class="metric-card {{ err_color }}">
+      <div class="metric-label">Tests Ran</div>
+      <div class="metric-value">{{ n }}<small style="font-size:1rem">/{{ s.total_tests }}</small></div>
+      <div class="metric-sub">{{ s.errors }} error(s)</div>
+      <div class="metric-bar"><div class="metric-bar-fill" style="width:{{ ((n / s.total_tests) * 100) | round }}%"></div></div>
+    </div>
+
+  </div>
+
+  <!-- ── CATEGORY BREAKDOWN ── -->
+  <p class="section-title"><span>🗂️</span> Results by Category</p>
+  <div class="category-grid">
+    {% for cat, m in data.by_category.items() %}
+    {% set cat_label = {'happy_path': 'Happy Path', 'edge_case': 'Edge Cases', 'adversarial': 'Adversarial'} %}
+    <div class="cat-card">
+      <h3>{{ cat_label.get(cat, cat) }} &nbsp;<span style="color:var(--gray-400);font-weight:400;font-size:0.8rem">(n={{ m.n }})</span></h3>
+
+      <div class="cat-row">
+        <div class="cat-row-label"><span>Intent Accuracy</span><span>{{ (m.intent_accuracy * 100) | round(1) }}%</span></div>
+        <div class="bar-bg"><div class="bar-fill bar-blue" style="width:{{ (m.intent_accuracy * 100) | round }}%"></div></div>
+      </div>
+
+      <div class="cat-row">
+        <div class="cat-row-label"><span>Escalation Accuracy</span><span>{{ (m.escalation_accuracy * 100) | round(1) }}%</span></div>
+        <div class="bar-bg"><div class="bar-fill bar-green" style="width:{{ (m.escalation_accuracy * 100) | round }}%"></div></div>
+      </div>
+
+      <div class="cat-row">
+        <div class="cat-row-label"><span>Policy Compliance</span><span>{{ m.avg_score }}/5</span></div>
+        <div class="bar-bg"><div class="bar-fill bar-purple" style="width:{{ (m.avg_score / 5 * 100) | round }}%"></div></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- ── RETRIEVAL QUALITY ── -->
+  {% if data.retrieval %}
+  <p class="section-title"><span>🔍</span> Retrieval Quality (Context Precision &amp; Recall)</p>
+  <div class="table-wrap" style="margin-bottom:32px">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Query</th>
+          <th>Expected Source</th>
+          <th>Chunks Retrieved</th>
+          <th>Chunks Relevant</th>
+          <th>Precision</th>
+          <th>Recall</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rt in data.retrieval %}
+        {% set prec_pct = (rt.precision * 100) | round(0) | int %}
+        {% set rec_pct  = (rt.recall  * 100) | round(0) | int %}
+        {% set prec_cls = 'pill-pass' if prec_pct >= 75 else ('pill-warn' if prec_pct >= 50 else 'pill-fail') %}
+        {% set rec_cls  = 'pill-pass' if rec_pct  >= 75 else ('pill-warn' if rec_pct  >= 50 else 'pill-fail') %}
+        <tr>
+          <td><code style="font-size:0.75rem;color:var(--gray-600)">{{ rt.id }}</code></td>
+          <td style="max-width:280px">{{ rt.query }}</td>
+          <td><span class="pill pill-happy" style="font-size:0.7rem">{{ rt.expected_source }}</span></td>
+          <td style="text-align:center">{{ rt.chunks_retrieved }}</td>
+          <td style="text-align:center">{{ rt.chunks_relevant }}</td>
+          <td><span class="pill {{ prec_cls }}">{{ prec_pct }}%</span></td>
+          <td><span class="pill {{ rec_cls  }}">{{ rec_pct  }}%</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <!-- ── 30-TEST RESULTS TABLE ── -->
+  <p class="section-title"><span>🧪</span> 30-Test Conversation Results</p>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterTests('all', this)">All ({{ data.tests | length }})</button>
+    <button class="filter-btn" onclick="filterTests('happy_path', this)">Happy Path</button>
+    <button class="filter-btn" onclick="filterTests('edge_case', this)">Edge Cases</button>
+    <button class="filter-btn" onclick="filterTests('adversarial', this)">Adversarial</button>
+    <button class="filter-btn" onclick="filterTests('fail', this)">Issues Only</button>
+  </div>
+
+  <div class="table-wrap">
+    <table id="test-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Intent</th>
+          <th>Escalation</th>
+          <th>Score</th>
+          <th>Latency</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in data.tests %}
+        {% if t.error %}
+          {% set status = 'error' %}
+        {% elif t.intent_correct and t.escalation_correct and t.score >= 3 %}
+          {% set status = 'pass' %}
+        {% else %}
+          {% set status = 'warn' %}
+        {% endif %}
+
+        {% set cat_pill = {'happy_path': 'pill-happy', 'edge_case': 'pill-warn', 'adversarial': 'pill-adv'} %}
+
+        <tr data-category="{{ t.category }}" data-status="{{ status }}"
+            title="{{ t.score_reason }}"
+            style="cursor:pointer" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'table-row' ? 'none' : 'table-row'">
+
+          <td><code style="font-size:0.75rem;color:var(--gray-600)">{{ t.id }}</code></td>
+
+          <td><span class="pill {{ cat_pill.get(t.category, '') }}">{{ t.category | replace('_', ' ') }}</span></td>
+
+          <td style="max-width:240px;font-size:0.8rem">{{ t.description }}</td>
+
+          <td>
+            {% if t.intent_correct %}
+              <span style="color:var(--green)">✓</span>
+            {% else %}
+              <span style="color:var(--red)">✗</span>
+            {% endif %}
+            <span style="font-size:0.75rem;color:var(--gray-600)"> {{ t.actual_intent }}</span>
+          </td>
+
+          <td>
+            {% if t.escalation_correct %}
+              <span style="color:var(--green)">✓</span>
+            {% else %}
+              <span style="color:var(--red)">✗</span>
+            {% endif %}
+            <span style="font-size:0.75rem;color:var(--gray-600)"> {{ 'Yes' if t.actual_escalation else 'No' }}</span>
+          </td>
+
+          <td>
+            {% if t.error %}
+              <span class="pill pill-error">ERR</span>
+            {% else %}
+              <div class="score-pip">
+                {% for i in range(5) %}
+                  {% if i < t.score %}
+                    {% if t.score >= 4 %}
+                      <div class="pip on"></div>
+                    {% elif t.score >= 3 %}
+                      <div class="pip on warn"></div>
+                    {% else %}
+                      <div class="pip on fail"></div>
+                    {% endif %}
+                  {% else %}
+                    <div class="pip"></div>
+                  {% endif %}
+                {% endfor %}
+                <span style="font-size:0.75rem;color:var(--gray-400);margin-left:4px">{{ t.score }}/5</span>
+              </div>
+            {% endif %}
+          </td>
+
+          <td style="font-size:0.78rem;color:var(--gray-400)">
+            {% if t.latency_ms > 0 %}
+              {{ (t.latency_ms / 1000) | round(1) }}s
+            {% else %}—{% endif %}
+          </td>
+
+          <td>
+            {% if status == 'pass' %}
+              <span class="pill pill-pass">PASS</span>
+            {% elif status == 'error' %}
+              <span class="pill pill-error">ERROR</span>
+            {% else %}
+              <span class="pill pill-warn">WARN</span>
+            {% endif %}
+          </td>
+        </tr>
+
+        <!-- Expandable detail row -->
+        <tr style="display:none;background:var(--gray-50)">
+          <td colspan="8" style="padding:12px 16px;font-size:0.8rem;color:var(--gray-600)">
+            {% if t.error %}
+              <strong style="color:var(--red)">Error:</strong> {{ t.error }}
+            {% else %}
+              <div style="margin-bottom:6px">
+                <strong>Expected:</strong> intent={{ t.expected_intent }}, escalation={{ t.expected_escalation }}
+                &nbsp;|&nbsp;
+                <strong>Got:</strong> intent={{ t.actual_intent }}, escalation={{ t.actual_escalation }}
+                {% if t.guardrail_triggered %}&nbsp;|&nbsp;<span class="pill pill-warn">guardrail triggered</span>{% endif %}
+              </div>
+              <div style="margin-bottom:6px"><strong>Judge:</strong> {{ t.score_reason }}</div>
+              <div style="background:white;border:1px solid var(--gray-200);border-radius:6px;padding:10px;font-size:0.78rem;color:var(--gray-600)">
+                <strong>Response preview:</strong><br>{{ t.response_preview }}
+              </div>
+            {% endif %}
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    CSAI 422 AI Engineering Capstone &nbsp;·&nbsp; NovaMart AI Support Agent &nbsp;·&nbsp;
+    {{ data.summary.total_tests }} tests &nbsp;·&nbsp;
+    <a href="/" style="color:var(--gray-400)">Back to Live Chat</a>
+  </div>
+
+</div>
+
+<script>
+function filterTests(filter, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  document.querySelectorAll('#test-table tbody tr[data-category]').forEach(row => {
+    const cat    = row.dataset.category;
+    const status = row.dataset.status;
+    const next   = row.nextElementSibling; // detail row
+
+    let show = filter === 'all'
+      || filter === cat
+      || (filter === 'fail' && (status === 'warn' || status === 'error'));
+
+    row.style.display  = show ? '' : 'none';
+    if (next) next.style.display = 'none'; // collapse details on filter
+  });
+}
+</script>
+</body>
+</html>

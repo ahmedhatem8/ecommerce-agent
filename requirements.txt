@@ -1,3 +1,4 @@
+flask
 langchain-groq
 langchain-chroma
 langchain-huggingface
