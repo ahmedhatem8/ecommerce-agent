@@ -897,7 +897,33 @@
       color: rgba(255,255,255,0.28);
       transition: color 0.3s;
     }
-    .routing-svg-wrap { padding: 0.6rem 0.75rem 0.5rem; }
+    .routing-svg-wrap {
+      padding: 0.6rem 0.75rem 0.5rem;
+      overflow: hidden;
+      max-height: 300px;
+      opacity: 1;
+      transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.25s ease;
+    }
+    .routing-viz.minimized .routing-svg-wrap {
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      opacity: 0;
+    }
+    .routing-viz-toggle {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.28);
+      cursor: pointer;
+      padding: 0 0.15rem;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      transition: color 0.2s;
+    }
+    .routing-viz-toggle:hover { color: rgba(255,255,255,0.65); }
+    .routing-viz-toggle svg { transition: transform 0.28s ease; }
+    .routing-viz.minimized .routing-viz-toggle svg { transform: rotate(180deg); }
 
     /* ─── INPUT AREA ─── */
     .input-area {
@@ -1171,6 +1197,11 @@
       <div class="routing-top">
         <div class="routing-label">LangGraph Routing Engine</div>
         <div class="routing-active" id="routingStatus">Standby</div>
+        <button class="routing-viz-toggle" id="routingToggleBtn" onclick="toggleRoutingViz()" title="Minimize / expand">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"/>
+          </svg>
+        </button>
       </div>
       <div class="routing-svg-wrap">
         <svg id="routeSvg" viewBox="0 0 340 292" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
@@ -2085,6 +2116,16 @@ function launchDot(pathEl, color) {
     else        setTimeout(() => dot.remove(), 300);
   }
   requestAnimationFrame(step);
+}
+
+/* ═══════════════════════════════════════════
+   ROUTING VIZ TOGGLE
+═══════════════════════════════════════════ */
+let routingVizMinimized = false;
+function toggleRoutingViz() {
+  routingVizMinimized = !routingVizMinimized;
+  document.querySelector('.routing-viz').classList.toggle('minimized', routingVizMinimized);
+  document.getElementById('routingToggleBtn').title = routingVizMinimized ? 'Expand routing engine' : 'Minimize routing engine';
 }
 
 /* ═══════════════════════════════════════════
