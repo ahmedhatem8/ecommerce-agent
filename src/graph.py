@@ -2,7 +2,11 @@ from typing import TypedDict, Annotated, List, Optional
 from langgraph.graph import StateGraph, END
 from dotenv import load_dotenv
 import operator
-from agents import order_lookup_agent, policy_agent, escalation_agent, chitchat_agent
+from agents import (
+    order_lookup_agent,
+    policy_rag_decision, policy_agent_with_rag, policy_agent_without_rag,
+    escalation_agent, chitchat_agent,
+)
 from memory import load_memory, update_memory_after_session
 from guardrails import check_input, check_policy
 
@@ -19,6 +23,7 @@ class AgentState(TypedDict):
     response: str
     escalate: bool
     guardrail_triggered: bool
+    retrieval_needed: Optional[bool]  # set by policy_rag_gate; routes to with/without RAG
 
 def supervisor_node(state: AgentState) -> AgentState:
     last_msg = state["messages"][-1]["content"]
@@ -98,6 +103,8 @@ Reply with ONLY one word: order_lookup, policy, escalation, or chitchat."""
     print(f"[Supervisor] Intent: {intent}")
     return {"intent": intent, "long_term_memory": long_term}
 
+# ── Routing functions ─────────────────────────────────────────────────────────
+
 def route_intent(state: AgentState) -> str:
     if state.get("guardrail_triggered"):
         return END
@@ -106,11 +113,26 @@ def route_intent(state: AgentState) -> str:
         return "escalation"
     return intent
 
+def route_rag_decision(state: AgentState) -> str:
+    """After the Agentic RAG gate, route to retrieval or direct-answer node."""
+    return "policy_with_rag" if state.get("retrieval_needed", True) else "policy_direct"
+
+# ── Agent nodes ───────────────────────────────────────────────────────────────
+
 def order_lookup_node(state: AgentState) -> AgentState:
     return order_lookup_agent(state)
 
-def policy_node(state: AgentState) -> AgentState:
-    return policy_agent(state)
+def policy_rag_gate_node(state: AgentState) -> AgentState:
+    """Agentic RAG gate: decides whether the knowledge base must be consulted."""
+    return policy_rag_decision(state)
+
+def policy_with_rag_node(state: AgentState) -> AgentState:
+    """Policy agent — retrieval path: runs hybrid BM25+dense search then answers."""
+    return policy_agent_with_rag(state)
+
+def policy_direct_node(state: AgentState) -> AgentState:
+    """Policy agent — direct path: answers from conversation context, no retrieval."""
+    return policy_agent_without_rag(state)
 
 def escalation_node(state: AgentState) -> AgentState:
     return escalation_agent(state)
@@ -148,7 +170,6 @@ def policy_check_node(state: AgentState) -> AgentState:
     print(f"[Policy Guardrail] OK")
 
     # Detect when the policy agent described an escalation in its own words
-    # (e.g. "I'll escalate this to a human agent") but didn't set the flag
     escalation_phrases = ["escalat", "human agent", "supervisor", "manual review", "human review"]
     if any(phrase in response.lower() for phrase in escalation_phrases):
         print(f"[Policy Guardrail] Escalation language detected — setting escalate=True")
@@ -156,30 +177,50 @@ def policy_check_node(state: AgentState) -> AgentState:
 
     return {}
 
+# ── Graph assembly ────────────────────────────────────────────────────────────
+
 def build_graph():
     g = StateGraph(AgentState)
-    g.add_node("supervisor",    supervisor_node)
-    g.add_node("order_lookup",  order_lookup_node)
-    g.add_node("policy",        policy_node)
-    g.add_node("escalation",    escalation_node)
-    g.add_node("chitchat",      chitchat_node)
-    g.add_node("policy_check",  policy_check_node)
+
+    g.add_node("supervisor",       supervisor_node)
+    g.add_node("order_lookup",     order_lookup_node)
+    g.add_node("policy_rag_gate",  policy_rag_gate_node)
+    g.add_node("policy_with_rag",  policy_with_rag_node)
+    g.add_node("policy_direct",    policy_direct_node)
+    g.add_node("escalation",       escalation_node)
+    g.add_node("chitchat",         chitchat_node)
+    g.add_node("policy_check",     policy_check_node)
+
     g.set_entry_point("supervisor")
+
+    # Supervisor routes to the right specialist (policy goes to the RAG gate first)
     g.add_conditional_edges("supervisor", route_intent, {
         "order_lookup": "order_lookup",
-        "policy":       "policy",
+        "policy":       "policy_rag_gate",
         "escalation":   "escalation",
         "chitchat":     "chitchat",
         END:            END,
     })
-    # Order lookup and policy agents pass through the policy check gate
-    g.add_edge("order_lookup", "policy_check")
-    g.add_edge("policy",       "policy_check")
-    g.add_edge("policy_check", END)
-    # Chitchat and escalation go straight to END — no policy commitments to check
-    g.add_edge("chitchat",     END)
-    g.add_edge("escalation",   END)
+
+    # Agentic RAG gate: decide whether to retrieve or answer from context
+    g.add_conditional_edges("policy_rag_gate", route_rag_decision, {
+        "policy_with_rag": "policy_with_rag",
+        "policy_direct":   "policy_direct",
+    })
+
+    # Both policy paths and order lookup pass through the policy check gate
+    g.add_edge("order_lookup",    "policy_check")
+    g.add_edge("policy_with_rag", "policy_check")
+    g.add_edge("policy_direct",   "policy_check")
+    g.add_edge("policy_check",    END)
+
+    # Chitchat and escalation go straight to END
+    g.add_edge("chitchat",    END)
+    g.add_edge("escalation",  END)
+
     return g.compile()
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
 
 def lookup_customer_by_id(customer_id: str) -> dict:
     import json
@@ -226,6 +267,7 @@ if __name__ == "__main__":
         "response": greeting,
         "escalate": False,
         "guardrail_triggered": False,
+        "retrieval_needed": None,
     }
 
     while True:

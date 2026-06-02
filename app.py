@@ -21,6 +21,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/graph')
+def graph_view():
+    mermaid_diagram = graph.get_graph().draw_mermaid()
+    return render_template('graph.html', mermaid=mermaid_diagram)
+
+
 @app.route('/eval')
 def eval_dashboard():
     import json as _json
@@ -114,6 +120,7 @@ def start_session():
         "response": greeting,
         "escalate": False,
         "guardrail_triggered": False,
+        "retrieval_needed": None,
     }
 
     sessions[session_id] = state
@@ -168,6 +175,7 @@ def chat():
         "agent_color": info["color"],
         "agent_icon": info["icon"],
         "guardrail_triggered": guardrail,
+        "retrieval_used": result.get("retrieval_needed"),
     })
 
 

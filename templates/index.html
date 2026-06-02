@@ -1012,6 +1012,22 @@
       }
       nav, .search-bar { display: none; }
     }
+
+    /* ── SVG connector glow classes ──────────────────────────────────────────
+       drop-shadow() avoids the Chrome/Edge bug with url(#filterID) in CSS.
+       !important beats all SVG presentation attributes unconditionally.     */
+    .gp { stroke:#8b5cf6 !important; stroke-width:3px !important;
+          filter:drop-shadow(0 0 4px #8b5cf6) drop-shadow(0 0 8px #8b5cf6) !important; opacity:1 !important; }
+    .gg { stroke:#10b981 !important; stroke-width:3px !important;
+          filter:drop-shadow(0 0 4px #10b981) drop-shadow(0 0 8px #10b981) !important; opacity:1 !important; }
+    .gt { stroke:#14b8a6 !important; stroke-width:3px !important;
+          filter:drop-shadow(0 0 4px #14b8a6) drop-shadow(0 0 8px #14b8a6) !important; opacity:1 !important; }
+    .gb { stroke:#3b82f6 !important; stroke-width:3px !important;
+          filter:drop-shadow(0 0 4px #3b82f6) drop-shadow(0 0 8px #3b82f6) !important; opacity:1 !important; }
+    .ga { stroke:#f59e0b !important; stroke-width:3px !important;
+          filter:drop-shadow(0 0 4px #f59e0b) drop-shadow(0 0 8px #f59e0b) !important; opacity:1 !important; }
+    .gr { stroke:#ef4444 !important; stroke-width:3px !important;
+          filter:drop-shadow(0 0 4px #ef4444) drop-shadow(0 0 8px #ef4444) !important; opacity:1 !important; }
   </style>
 </head>
 <body>
@@ -1157,162 +1173,145 @@
         <div class="routing-active" id="routingStatus">Standby</div>
       </div>
       <div class="routing-svg-wrap">
-        <svg id="routeSvg" viewBox="0 0 340 268" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+        <svg id="routeSvg" viewBox="0 0 340 292" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
           <defs>
             <filter id="glow">
-              <feGaussianBlur stdDeviation="3.5" result="blur"/>
+              <feGaussianBlur stdDeviation="2.8" result="blur"/>
               <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
             <filter id="softGlow">
-              <feGaussianBlur stdDeviation="2" result="blur"/>
+              <feGaussianBlur stdDeviation="1.6" result="blur"/>
               <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
-            <marker id="arrowDim" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-              <path d="M0,0 L6,3 L0,6 z" fill="rgba(255,255,255,0.12)"/>
-            </marker>
-            <marker id="arrowBlue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-              <path d="M0,0 L6,3 L0,6 z" fill="#3b82f6"/>
-            </marker>
-            <marker id="arrowGreen" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-              <path d="M0,0 L6,3 L0,6 z" fill="#10b981"/>
-            </marker>
-            <marker id="arrowRed" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-              <path d="M0,0 L6,3 L0,6 z" fill="#ef4444"/>
-            </marker>
-            <marker id="arrowAmber" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-              <path d="M0,0 L6,3 L0,6 z" fill="#f59e0b"/>
-            </marker>
-            <marker id="arrowPurple" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-              <path d="M0,0 L6,3 L0,6 z" fill="#8b5cf6"/>
-            </marker>
+            <marker id="arrowDim"    markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 z" fill="rgba(255,255,255,0.1)"/></marker>
+            <marker id="arrowBlue"   markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 z" fill="#3b82f6"/></marker>
+            <marker id="arrowGreen"  markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 z" fill="#10b981"/></marker>
+            <marker id="arrowRed"    markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 z" fill="#ef4444"/></marker>
+            <marker id="arrowAmber"  markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 z" fill="#f59e0b"/></marker>
+            <marker id="arrowPurple" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 z" fill="#8b5cf6"/></marker>
+            <marker id="arrowTeal"   markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 z" fill="#14b8a6"/></marker>
           </defs>
 
-          <!-- START -->
-          <rect id="nodeStart" x="141" y="2" width="58" height="18" rx="9"
-                fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-          <text x="170" y="14.5" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="7.5" font-weight="800" font-family="sans-serif">START</text>
+          <!-- ── START ── -->
+          <rect id="nodeStart" x="142" y="4" width="56" height="16" rx="8"
+                fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.32)" stroke-width="1"/>
+          <text x="170" y="15" text-anchor="middle" fill="rgba(255,255,255,0.78)" font-size="7" font-weight="800" font-family="sans-serif">START</text>
 
-          <!-- START → SUPERVISOR -->
-          <line id="lineStartSup" x1="170" y1="20" x2="170" y2="44"
-                stroke="rgba(255,255,255,0.35)" stroke-width="1.8" marker-end="url(#arrowDim)"/>
+          <!-- lineStartSup moved to end of SVG for z-order -->
 
-          <!-- LONG-TERM MEMORY (left of supervisor) -->
-          <rect id="nodeMemory" x="2" y="50" width="82" height="32" rx="8"
-                fill="rgba(139,92,246,0.07)" stroke="rgba(139,92,246,0.2)" stroke-width="1"/>
-          <text x="43" y="61" text-anchor="middle" fill="rgba(139,92,246,0.75)" font-size="8" font-weight="700" font-family="sans-serif">💾 LONG-TERM</text>
-          <text x="43" y="71" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="6" font-family="sans-serif">Past Orders &amp; Prefs</text>
-          <text id="ltmSaved" x="43" y="80" text-anchor="middle" fill="rgba(16,185,129,0)" font-size="6" font-weight="700" font-family="sans-serif">✓ SAVED</text>
-          <!-- LONG-TERM → SUPERVISOR dashed line -->
-          <path id="pathMemory" d="M84,66 C90,66 93,64 96,64"
-                fill="none" stroke="rgba(139,92,246,0.22)" stroke-width="1"
-                stroke-dasharray="3,2" marker-end="url(#arrowDim)"/>
+          <!-- ── LONG-TERM MEMORY ── -->
+          <rect id="nodeMemory" x="2" y="46" width="82" height="30" rx="7"
+                fill="rgba(139,92,246,0.06)" stroke="rgba(139,92,246,0.17)" stroke-width="0.9"/>
+          <text x="43" y="57" text-anchor="middle" fill="rgba(139,92,246,0.68)" font-size="7.5" font-weight="700" font-family="sans-serif">💾 LONG-TERM</text>
+          <text x="43" y="67" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="5.8" font-family="sans-serif">Past Orders &amp; Prefs</text>
+          <text id="ltmSaved" x="43" y="75" text-anchor="middle" fill="rgba(16,185,129,0)" font-size="5.5" font-weight="700" font-family="sans-serif">✓ SAVED</text>
+          <path id="pathMemory" d="M84,61 C89,61 92,60 96,60"
+                fill="none" stroke="rgba(139,92,246,0.2)" stroke-width="0.9" stroke-dasharray="3,2" marker-end="url(#arrowDim)"/>
 
-          <!-- SHORT-TERM MEMORY (right of supervisor) -->
-          <rect id="nodeShortTerm" x="258" y="50" width="80" height="32" rx="8"
-                fill="rgba(59,130,246,0.07)" stroke="rgba(59,130,246,0.2)" stroke-width="1"/>
-          <text x="298" y="61" text-anchor="middle" fill="rgba(59,130,246,0.75)" font-size="8" font-weight="700" font-family="sans-serif">🔵 SHORT-TERM</text>
-          <text x="298" y="71" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="6" font-family="sans-serif">Session Context</text>
-          <text id="stmCount" x="298" y="80" text-anchor="middle" fill="rgba(59,130,246,0.5)" font-size="6" font-family="sans-serif">0 msgs</text>
-          <!-- SHORT-TERM → SUPERVISOR dashed line -->
-          <path id="pathShortTerm" d="M258,66 C252,66 248,64 244,64"
-                fill="none" stroke="rgba(59,130,246,0.22)" stroke-width="1"
-                stroke-dasharray="3,2" marker-end="url(#arrowDim)"/>
+          <!-- ── SHORT-TERM MEMORY ── -->
+          <rect id="nodeShortTerm" x="256" y="46" width="82" height="30" rx="7"
+                fill="rgba(59,130,246,0.06)" stroke="rgba(59,130,246,0.17)" stroke-width="0.9"/>
+          <text x="297" y="57" text-anchor="middle" fill="rgba(59,130,246,0.68)" font-size="7.5" font-weight="700" font-family="sans-serif">🔵 SHORT-TERM</text>
+          <text x="297" y="67" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="5.8" font-family="sans-serif">Session Context</text>
+          <text id="stmCount" x="297" y="75" text-anchor="middle" fill="rgba(59,130,246,0.45)" font-size="5.5" font-family="sans-serif">0 msgs</text>
+          <path id="pathShortTerm" d="M256,61 C251,61 248,60 244,60"
+                fill="none" stroke="rgba(59,130,246,0.2)" stroke-width="0.9" stroke-dasharray="3,2" marker-end="url(#arrowDim)"/>
 
-          <!-- SUPERVISOR -->
-          <rect id="supRect" x="96" y="46" width="148" height="36" rx="9"
-                fill="rgba(139,92,246,0.1)" stroke="rgba(139,92,246,0.28)" stroke-width="1.2"/>
-          <text x="170" y="61" text-anchor="middle" fill="rgba(139,92,246,0.85)" font-size="9.5" font-weight="700" font-family="sans-serif">🧠 SUPERVISOR</text>
-          <text x="170" y="74" text-anchor="middle" fill="rgba(255,255,255,0.28)" font-size="7.5" font-family="sans-serif">Intent Classifier</text>
+          <!-- ── SUPERVISOR ── -->
+          <rect id="supRect" x="96" y="42" width="148" height="34" rx="8"
+                fill="rgba(139,92,246,0.09)" stroke="rgba(139,92,246,0.24)" stroke-width="1"/>
+          <text x="170" y="57" text-anchor="middle" fill="rgba(139,92,246,0.82)" font-size="9.5" font-weight="700" font-family="sans-serif">🧠 SUPERVISOR</text>
+          <text x="170" y="69" text-anchor="middle" fill="rgba(255,255,255,0.24)" font-size="6.8" font-family="sans-serif">Intent Classifier</text>
 
-          <!-- SUPERVISOR → GUARDRAILS (animated line) -->
-          <path id="lineSupGuard" d="M170,82 L170,93"
-                fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.8" marker-end="url(#arrowDim)"/>
+          <!-- lineSupGuard moved to end of SVG for z-order -->
 
-          <!-- GUARDRAILS NODE -->
-          <rect id="guardRect" x="108" y="93" width="124" height="28" rx="8"
-                fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-          <text id="guardIcon" x="170" y="106" text-anchor="middle" fill="rgba(255,255,255,0.65)" font-size="9.5" font-weight="700" font-family="sans-serif">🛡️ GUARDRAILS</text>
-          <text id="guardTextSub" x="170" y="116" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="7" font-family="sans-serif">Content &amp; Safety Filter</text>
+          <!-- ── GUARDRAILS ── -->
+          <rect id="guardRect" x="109" y="90" width="122" height="25" rx="7"
+                fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.12)" stroke-width="0.9"/>
+          <text id="guardIcon" x="170" y="102" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="9" font-weight="700" font-family="sans-serif">🛡️ GUARDRAILS</text>
+          <text id="guardTextSub" x="170" y="111" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="6" font-family="sans-serif">Content &amp; Safety Filter</text>
 
-          <!-- GUARDRAILS → END (blocked path, shows only on fail) -->
-          <path id="pathGuardBlocked" d="M170,121 L170,246"
-                fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1.5"/>
+          <!-- GUARDRAILS → END blocked path (only fires on fail) -->
+          <path id="pathGuardBlocked" d="M170,115 L170,266"
+                fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1.4"/>
 
-          <!-- GUARDRAILS → agents (curved paths) -->
-          <path id="pathOrder"
-                d="M133,121 C133,132 42,132 42,143"
-                fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"
-                marker-end="url(#arrowDim)"/>
-          <path id="pathPolicy"
-                d="M158,121 C158,132 127,132 127,143"
-                fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"
-                marker-end="url(#arrowDim)"/>
-          <path id="pathEsc"
-                d="M182,121 C182,132 212,132 212,143"
-                fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"
-                marker-end="url(#arrowDim)"/>
-          <path id="pathChat"
-                d="M207,121 C207,132 297,132 297,143"
-                fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"
-                marker-end="url(#arrowDim)"/>
+          <!-- GUARDRAILS → agents -->
+          <path id="pathOrder"  d="M131,115 C131,126 36,126 36,130"  fill="none" stroke="rgba(255,255,255,0.30)" stroke-width="1.3" marker-end="url(#arrowDim)"/>
+          <path id="pathPolicy" d="M156,115 C156,126 124,126 124,130" fill="none" stroke="rgba(255,255,255,0.30)" stroke-width="1.3" marker-end="url(#arrowDim)"/>
+          <path id="pathEsc"    d="M184,115 C184,126 212,126 212,130" fill="none" stroke="rgba(255,255,255,0.30)" stroke-width="1.3" marker-end="url(#arrowDim)"/>
+          <path id="pathChat"   d="M209,115 C209,126 300,126 300,130" fill="none" stroke="rgba(255,255,255,0.30)" stroke-width="1.3" marker-end="url(#arrowDim)"/>
 
-          <!-- AGENT NODES -->
-          <rect id="nodeOrder" x="5" y="143" width="74" height="32" rx="8"
-                fill="rgba(59,130,246,0.07)" stroke="rgba(59,130,246,0.2)" stroke-width="1"/>
-          <text x="42" y="156" text-anchor="middle" fill="rgba(59,130,246,0.75)" font-size="9" font-weight="700" font-family="sans-serif">📦 Order</text>
-          <text x="42" y="167" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="7" font-family="sans-serif">Lookup Agent</text>
+          <!-- ── AGENT NODES ── -->
+          <rect id="nodeOrder"  x="2"   y="130" width="68" height="26" rx="7" fill="rgba(59,130,246,0.06)"  stroke="rgba(59,130,246,0.17)"  stroke-width="0.9"/>
+          <text x="36"  y="141" text-anchor="middle" fill="rgba(59,130,246,0.72)"  font-size="8.5" font-weight="700" font-family="sans-serif">📦 Order</text>
+          <text x="36"  y="151" text-anchor="middle" fill="rgba(255,255,255,0.19)" font-size="6"   font-family="sans-serif">Lookup Agent</text>
 
-          <rect id="nodePolicy" x="90" y="143" width="74" height="32" rx="8"
-                fill="rgba(16,185,129,0.07)" stroke="rgba(16,185,129,0.2)" stroke-width="1"/>
-          <text x="127" y="156" text-anchor="middle" fill="rgba(16,185,129,0.75)" font-size="9" font-weight="700" font-family="sans-serif">📋 Policy</text>
-          <text x="127" y="167" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="7" font-family="sans-serif">RAG Agent</text>
+          <rect id="nodePolicy" x="90"  y="130" width="68" height="26" rx="7" fill="rgba(16,185,129,0.06)"  stroke="rgba(16,185,129,0.17)"  stroke-width="0.9"/>
+          <text x="124" y="141" text-anchor="middle" fill="rgba(16,185,129,0.72)"  font-size="8.5" font-weight="700" font-family="sans-serif">📋 Policy</text>
+          <text x="124" y="151" text-anchor="middle" fill="rgba(255,255,255,0.19)" font-size="6"   font-family="sans-serif">RAG Agent</text>
 
-          <rect id="nodeEsc" x="175" y="143" width="74" height="32" rx="8"
-                fill="rgba(239,68,68,0.07)" stroke="rgba(239,68,68,0.2)" stroke-width="1"/>
-          <text x="212" y="156" text-anchor="middle" fill="rgba(239,68,68,0.75)" font-size="9" font-weight="700" font-family="sans-serif">🚨 Escalation</text>
-          <text x="212" y="167" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="7" font-family="sans-serif">Human Handoff</text>
+          <rect id="nodeEsc"    x="178" y="130" width="68" height="26" rx="7" fill="rgba(239,68,68,0.06)"   stroke="rgba(239,68,68,0.17)"   stroke-width="0.9"/>
+          <text x="212" y="141" text-anchor="middle" fill="rgba(239,68,68,0.72)"   font-size="8.5" font-weight="700" font-family="sans-serif">🚨 Escalation</text>
+          <text x="212" y="151" text-anchor="middle" fill="rgba(255,255,255,0.19)" font-size="6"   font-family="sans-serif">Human Handoff</text>
 
-          <rect id="nodeChat" x="260" y="143" width="74" height="32" rx="8"
-                fill="rgba(245,158,11,0.07)" stroke="rgba(245,158,11,0.2)" stroke-width="1"/>
-          <text x="297" y="156" text-anchor="middle" fill="rgba(245,158,11,0.75)" font-size="9" font-weight="700" font-family="sans-serif">💬 Chitchat</text>
-          <text x="297" y="167" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="7" font-family="sans-serif">Casual Agent</text>
+          <rect id="nodeChat"   x="266" y="130" width="68" height="26" rx="7" fill="rgba(245,158,11,0.06)"  stroke="rgba(245,158,11,0.17)"  stroke-width="0.9"/>
+          <text x="300" y="141" text-anchor="middle" fill="rgba(245,158,11,0.72)"  font-size="8.5" font-weight="700" font-family="sans-serif">💬 Chitchat</text>
+          <text x="300" y="151" text-anchor="middle" fill="rgba(255,255,255,0.19)" font-size="6"   font-family="sans-serif">Casual Agent</text>
 
-          <!-- Paths: order / policy / chitchat → POLICY CHECK (more breathing room) -->
-          <path id="pathOrderCheck"
-                d="M42,175 C42,190 95,197 110,197"
-                fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"
-                marker-end="url(#arrowDim)"/>
-          <path id="pathPolicyCheck"
-                d="M127,175 C127,190 143,197 148,197"
-                fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"
-                marker-end="url(#arrowDim)"/>
-          <path id="pathChatCheck"
-                d="M297,175 C297,190 242,197 235,197"
-                fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"
-                marker-end="url(#arrowDim)"/>
+          <!-- ── AGENTIC RAG GATE (Policy column only) ── -->
+          <!-- pathPolicyRag moved to end of SVG for z-order -->
 
-          <!-- Escalation → END bypass (red dashed, clearly labeled) -->
-          <path id="pathEscEnd"
-                d="M212,175 C212,222 192,246 188,246"
-                fill="none" stroke="rgba(239,68,68,0.3)" stroke-width="1.5"
+          <!-- RAG gate diamond -->
+          <polygon id="nodeRagGate" points="124,165 140,178 124,191 108,178"
+                   fill="rgba(20,184,166,0.06)" stroke="rgba(20,184,166,0.2)" stroke-width="0.9"/>
+          <text x="124" y="176" text-anchor="middle" fill="rgba(20,184,166,0.68)" font-size="7" font-weight="700" font-family="sans-serif">🔎 RAG?</text>
+          <text id="ragGateLabel" x="124" y="185" text-anchor="middle" fill="rgba(255,255,255,0.18)" font-size="5.2" font-family="sans-serif">Decide</text>
+
+          <!-- Knowledge Base mini node -->
+          <rect id="nodeKB" x="32" y="196" width="56" height="15" rx="5"
+                fill="rgba(20,184,166,0.04)" stroke="rgba(20,184,166,0.14)" stroke-width="0.8"/>
+          <text x="60" y="206" text-anchor="middle" fill="rgba(20,184,166,0.48)" font-size="6" font-weight="700" font-family="sans-serif">🗄️ Knowledge Base</text>
+
+          <!-- RAG gate → KB (retrieve path) -->
+          <path id="pathRagRetrieve" d="M108,178 C82,175 60,182 60,196"
+                fill="none" stroke="rgba(20,184,166,0.22)" stroke-width="1.2" marker-end="url(#arrowDim)"/>
+          <!-- KB → Policy Check (retrieve continues) -->
+          <path id="pathKBCheck" d="M60,211 C60,220 76,220 90,220"
+                fill="none" stroke="rgba(20,184,166,0.22)" stroke-width="1.2" marker-end="url(#arrowDim)"/>
+
+          <!-- pathRagDirect moved to end of SVG for z-order -->
+
+          <!-- Order → Policy Check -->
+          <path id="pathOrderCheck" d="M36,156 C36,202 90,220 93,220"
+                fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.3" marker-end="url(#arrowDim)"/>
+          <!-- Chat → Policy Check -->
+          <path id="pathChatCheck"  d="M300,156 C300,202 250,220 248,220"
+                fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="1.3" marker-end="url(#arrowDim)"/>
+
+          <!-- Escalation → END bypass (dashed red, far-right arc) -->
+          <path id="pathEscEnd" d="M246,156 C330,156 330,270 192,270"
+                fill="none" stroke="rgba(239,68,68,0.18)" stroke-width="1.2"
                 stroke-dasharray="4,2.5" marker-end="url(#arrowRed)"/>
 
-          <!-- POLICY CHECK NODE -->
-          <rect id="nodeCheck" x="83" y="197" width="174" height="26" rx="8"
-                fill="rgba(245,158,11,0.07)" stroke="rgba(245,158,11,0.22)" stroke-width="1.2"/>
-          <text id="checkIcon" x="170" y="210" text-anchor="middle" fill="rgba(245,158,11,0.85)" font-size="8.5" font-weight="700" font-family="sans-serif">🔍 POLICY CHECK</text>
-          <text x="170" y="219" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-size="6.5" font-family="sans-serif">Response Compliance Gate</text>
+          <!-- ── POLICY CHECK ── -->
+          <rect id="nodeCheck" x="86" y="220" width="168" height="22" rx="7"
+                fill="rgba(245,158,11,0.06)" stroke="rgba(245,158,11,0.19)" stroke-width="0.9"/>
+          <text id="checkIcon" x="170" y="231" text-anchor="middle" fill="rgba(245,158,11,0.8)" font-size="8" font-weight="700" font-family="sans-serif">🔍 POLICY CHECK</text>
+          <text x="170" y="239" text-anchor="middle" fill="rgba(255,255,255,0.18)" font-size="5.5" font-family="sans-serif">Response Compliance Gate</text>
 
-          <!-- POLICY CHECK → END -->
-          <path id="pathCheckEnd"
-                d="M170,223 L170,246"
-                fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.8"
-                marker-end="url(#arrowDim)"/>
+          <!-- pathCheckEnd moved to end of SVG for z-order -->
 
-          <!-- END -->
-          <rect id="nodeEnd" x="141" y="246" width="58" height="18" rx="9"
-                fill="rgba(16,185,129,0.12)" stroke="rgba(16,185,129,0.5)" stroke-width="1.5"/>
-          <text x="170" y="258.5" text-anchor="middle" fill="rgba(16,185,129,0.85)" font-size="7.5" font-weight="800" font-family="sans-serif">END</text>
+          <!-- ── END ── -->
+          <rect id="nodeEnd" x="142" y="265" width="56" height="16" rx="8"
+                fill="rgba(16,185,129,0.1)" stroke="rgba(16,185,129,0.42)" stroke-width="1"/>
+          <text x="170" y="276" text-anchor="middle" fill="rgba(16,185,129,0.8)" font-size="7" font-weight="800" font-family="sans-serif">END</text>
+
+          <!-- ── Short connector lines rendered LAST so they sit above all node glows ── -->
+          <path id="lineStartSup"  d="M170,20 L170,42"    fill="none" stroke="rgba(255,255,255,0.38)" stroke-width="1.4" marker-end="url(#arrowDim)"/>
+          <path id="lineSupGuard"  d="M170,76 L170,90"    fill="none" stroke="rgba(255,255,255,0.38)" stroke-width="1.4" marker-end="url(#arrowDim)"/>
+          <path id="pathPolicyRag" d="M124,156 L124,165"  fill="none" stroke="rgba(20,184,166,0.30)"  stroke-width="1.3" marker-end="url(#arrowDim)"/>
+          <path id="pathRagDirect" d="M124,191 L124,220"  fill="none" stroke="rgba(20,184,166,0.22)"  stroke-width="1.2" marker-end="url(#arrowDim)"/>
+          <path id="pathCheckEnd"  d="M170,242 L170,265"  fill="none" stroke="rgba(255,255,255,0.40)" stroke-width="1.4" marker-end="url(#arrowDim)"/>
         </svg>
       </div>
     </div>
@@ -1504,7 +1503,7 @@ async function sendMessage() {
       resetRouting();
       setRoutingStatus('Error');
     } else {
-      await animateRouting(data.intent, data.agent_color, data.guardrail_triggered);
+      await animateRouting(data.intent, data.agent_color, data.guardrail_triggered, data.retrieval_used);
       appendBotMsg(data.response, data.intent, data.agent_label, data.agent_color, data.agent_icon);
       if (!data.guardrail_triggered) {
         setRoutingStatus(data.agent_icon + ' ' + data.agent_label);
@@ -1675,18 +1674,18 @@ function setShortTermActive(on, faded = false) {
     rect.style.stroke      = '#3b82f6';
     rect.style.strokeWidth = '1.8';
     rect.style.filter      = 'url(#softGlow)';
-    path.setAttribute('stroke', '#3b82f6');
-    path.setAttribute('stroke-width', '1.8');
-    path.removeAttribute('stroke-dasharray');
+    path.style.stroke      = '#3b82f6';
+    path.style.strokeWidth = '1.8';
+    path.style.strokeDasharray = 'none';
     path.style.filter      = 'url(#softGlow)';
   } else {
     rect.style.fill        = faded ? 'rgba(59,130,246,0.03)' : '';
     rect.style.stroke      = faded ? 'rgba(59,130,246,0.1)' : '';
     rect.style.strokeWidth = '';
     rect.style.filter      = '';
-    path.setAttribute('stroke', faded ? 'rgba(59,130,246,0.1)' : 'rgba(59,130,246,0.22)');
-    path.setAttribute('stroke-width', '1');
-    path.setAttribute('stroke-dasharray', '3,2');
+    path.style.stroke      = faded ? 'rgba(59,130,246,0.1)' : 'rgba(59,130,246,0.22)';
+    path.style.strokeWidth = '1';
+    path.style.strokeDasharray = '3,2';
     path.style.filter      = '';
   }
 }
@@ -1695,14 +1694,89 @@ function setShortTermActive(on, faded = false) {
    ROUTING VISUALIZATION
 ═══════════════════════════════════════════ */
 const AGENT_CFG = {
-  order_lookup: { pathId:'pathOrder',  nodeId:'nodeOrder',  color:'#3b82f6', marker:'arrowBlue',  checkPathId:'pathOrderCheck'  },
-  policy:       { pathId:'pathPolicy', nodeId:'nodePolicy', color:'#10b981', marker:'arrowGreen', checkPathId:'pathPolicyCheck' },
-  escalation:   { pathId:'pathEsc',    nodeId:'nodeEsc',    color:'#ef4444', marker:'arrowRed',   checkPathId:null              },
-  chitchat:     { pathId:'pathChat',   nodeId:'nodeChat',   color:'#f59e0b', marker:'arrowAmber', checkPathId:'pathChatCheck'   },
+  order_lookup: { pathId:'pathOrder',  nodeId:'nodeOrder',  color:'#3b82f6', marker:'arrowBlue',  checkPathId:'pathOrderCheck', ragGate:false },
+  policy:       { pathId:'pathPolicy', nodeId:'nodePolicy', color:'#10b981', marker:'arrowGreen', checkPathId:null,             ragGate:true  },
+  escalation:   { pathId:'pathEsc',    nodeId:'nodeEsc',    color:'#ef4444', marker:'arrowRed',   checkPathId:null,             ragGate:false },
+  chitchat:     { pathId:'pathChat',   nodeId:'nodeChat',   color:'#f59e0b', marker:'arrowAmber', checkPathId:'pathChatCheck',  ragGate:false },
 };
 
 function setRoutingStatus(txt) {
   document.getElementById('routingStatus').textContent = txt;
+}
+
+/* ── Glow class helpers ──────────────────────────────────────────────────── */
+const GLOW_CLASSES = ['gp','gg','gt','gb','ga','gr'];
+
+const MARKER_CLASS = {
+  arrowPurple:'gp', arrowGreen:'gg', arrowTeal:'gt',
+  arrowBlue:'gb',   arrowAmber:'ga', arrowRed:'gr',
+};
+
+function clearGlow(el) {
+  GLOW_CLASSES.forEach(c => el.classList.remove(c));
+  el.style.filter=''; el.style.strokeDasharray='';
+  el.style.strokeDashoffset=''; el.style.transition='';
+}
+
+/* ── Generic path animator ──
+   Uses CSS class with !important — unbeatable specificity.
+   Short paths (< 40 px) glow instantly; longer paths get draw-on animation. */
+function animatePath(id, color, marker, durationS) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  // Apply the glow CSS class — this CANNOT be overridden by any presentation attribute
+  GLOW_CLASSES.forEach(c => el.classList.remove(c));
+  const cls = MARKER_CLASS[marker] || 'gp';
+  el.classList.add(cls);
+  el.setAttribute('marker-end', `url(#${marker})`);
+
+  // Clear stale dash state
+  el.style.transition       = 'none';
+  el.style.strokeDasharray  = '';
+  el.style.strokeDashoffset = '';
+
+  let len = 0;
+  try { len = el.getTotalLength(); } catch(e) {}
+
+  if (len >= 40) {
+    // Draw-on animation — start hidden, then reveal
+    el.style.strokeDasharray  = `${len}`;
+    el.style.strokeDashoffset = `${len}`;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      el.style.transition       = `stroke-dashoffset ${durationS}s ease-in-out`;
+      el.style.strokeDashoffset = '0';
+    }));
+  }
+  // Short paths: CSS class already makes them bright and solid — done
+}
+
+/* ── RAG gate helpers ── */
+function setRagGateActive(on, retrieve) {
+  const diamond = document.getElementById('nodeRagGate');
+  const label   = document.getElementById('ragGateLabel');
+  if (!diamond) return;
+  if (on) {
+    diamond.style.fill        = retrieve ? 'rgba(20,184,166,0.28)' : 'rgba(20,184,166,0.18)';
+    diamond.style.stroke      = '#14b8a6';
+    diamond.style.strokeWidth = '1.6';
+    diamond.style.filter      = 'url(#softGlow)';
+    if (label) { label.textContent = retrieve ? '🔍 Retrieve' : '💬 Context'; label.setAttribute('fill','#14b8a6'); }
+  } else {
+    diamond.style.fill=''; diamond.style.stroke=''; diamond.style.strokeWidth=''; diamond.style.filter='';
+    if (label) { label.textContent = 'Decide'; label.setAttribute('fill','rgba(255,255,255,0.18)'); }
+  }
+}
+
+function setKBActive(on) {
+  const node = document.getElementById('nodeKB');
+  if (!node) return;
+  if (on) {
+    node.style.fill='rgba(20,184,166,0.22)'; node.style.stroke='#14b8a6';
+    node.style.strokeWidth='1.4'; node.style.filter='url(#softGlow)';
+  } else {
+    node.style.fill=''; node.style.stroke=''; node.style.strokeWidth=''; node.style.filter='';
+  }
 }
 
 function setSupervisorActive(on) {
@@ -1780,18 +1854,18 @@ function setMemoryActive(on) {
     rect.style.stroke      = '#8b5cf6';
     rect.style.strokeWidth = '1.8';
     rect.style.filter      = 'url(#softGlow)';
-    path.setAttribute('stroke', '#8b5cf6');
-    path.setAttribute('stroke-width', '1.8');
-    path.removeAttribute('stroke-dasharray');
+    path.style.stroke      = '#8b5cf6';
+    path.style.strokeWidth = '1.8';
+    path.style.strokeDasharray = 'none';
     path.style.filter      = 'url(#softGlow)';
   } else {
     rect.style.fill        = '';
     rect.style.stroke      = '';
     rect.style.strokeWidth = '';
     rect.style.filter      = '';
-    path.setAttribute('stroke', 'rgba(139,92,246,0.22)');
-    path.setAttribute('stroke-width', '1');
-    path.setAttribute('stroke-dasharray', '3,2');
+    path.style.stroke      = 'rgba(139,92,246,0.22)';
+    path.style.strokeWidth = '1';
+    path.style.strokeDasharray = '3,2';
     path.style.filter      = '';
   }
 }
@@ -1827,236 +1901,164 @@ function resetRouting() {
   setShortTermActive(false);
   setGuardrailState('idle');
   setPolicyCheckActive(null);
-  // Reset supervisor → guardrails line
-  // Reset START node and line
-  const startNode = document.getElementById('nodeStart');
-  if (startNode) { startNode.style.fill=''; startNode.style.stroke=''; startNode.style.strokeWidth=''; startNode.style.filter=''; }
-  const startLine = document.getElementById('lineStartSup');
-  if (startLine) {
-    startLine.setAttribute('stroke','rgba(255,255,255,0.35)');
-    startLine.setAttribute('stroke-width','1.8');
-    startLine.setAttribute('marker-end','url(#arrowDim)');
-    startLine.style.filter=''; startLine.style.strokeDasharray=''; startLine.style.strokeDashoffset=''; startLine.style.transition='';
-  }
-  const sg = document.getElementById('lineSupGuard');
-  sg.setAttribute('stroke', 'rgba(255,255,255,0.35)');
-  sg.setAttribute('stroke-width', '1.8');
-  sg.setAttribute('marker-end', 'url(#arrowDim)');
-  sg.style.filter           = '';
-  sg.style.strokeDasharray  = '';
-  sg.style.strokeDashoffset = '';
-  sg.style.transition       = '';
-  ['pathOrder','pathPolicy','pathEsc','pathChat'].forEach(id => {
-    const el = document.getElementById(id);
-    el.setAttribute('stroke','rgba(255,255,255,0.22)');
-    el.setAttribute('stroke-width','1.5');
-    el.setAttribute('marker-end','url(#arrowDim)');
-    el.style.filter           = '';
-    el.style.strokeDasharray  = '';
-    el.style.strokeDashoffset = '';
-  });
-  ['nodeOrder','nodePolicy','nodeEsc','nodeChat'].forEach(id => {
-    const el = document.getElementById(id);
-    el.style.fill        = '';
-    el.style.stroke      = '';
-    el.style.strokeWidth = '';
-    el.style.filter      = '';
-  });
-  const endNode = document.getElementById('nodeEnd');
-  if (endNode) { endNode.style.fill = ''; endNode.style.stroke = ''; endNode.style.strokeWidth = ''; endNode.style.filter = ''; }
-  ['pathOrderCheck','pathPolicyCheck','pathChatCheck'].forEach(id => {
+  setRagGateActive(false, null);
+  setKBActive(false);
+
+  const resetEl = (id, stroke, sw, marker) => {
     const el = document.getElementById(id);
     if (!el) return;
-    el.setAttribute('stroke', 'rgba(255,255,255,0.2)');
-    el.setAttribute('stroke-width', '1.5');
-    el.setAttribute('marker-end', 'url(#arrowDim)');
+    // Remove any active glow class so CSS !important no longer overrides
+    GLOW_CLASSES.forEach(c => el.classList.remove(c));
+    if (stroke) {
+      el.style.stroke      = stroke;
+      el.style.strokeWidth = sw;
+      el.style.opacity     = '1';
+      el.setAttribute('marker-end', `url(#${marker})`);
+    } else {
+      el.style.fill=''; el.style.stroke=''; el.style.strokeWidth=''; el.style.filter=''; el.style.opacity='';
+    }
     el.style.filter=''; el.style.strokeDasharray=''; el.style.strokeDashoffset=''; el.style.transition='';
-  });
-  const checkEnd = document.getElementById('pathCheckEnd');
-  if (checkEnd) {
-    checkEnd.setAttribute('stroke', 'rgba(255,255,255,0.3)');
-    checkEnd.setAttribute('stroke-width', '1.8');
-    checkEnd.setAttribute('marker-end', 'url(#arrowDim)');
-    checkEnd.style.filter=''; checkEnd.style.strokeDasharray=''; checkEnd.style.strokeDashoffset=''; checkEnd.style.transition='';
-  }
-  // dummy forEach to satisfy the next closing
-  [].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.setAttribute('stroke', 'rgba(255,255,255,0.2)');
-    el.setAttribute('stroke-width', '1.5');
-    el.setAttribute('marker-end', 'url(#arrowDim)');
-    el.style.filter           = '';
-    el.style.strokeDasharray  = '';
-    el.style.strokeDashoffset = '';
-    el.style.transition       = '';
-  });
+  };
+
+  resetEl('nodeStart',  null, null, null);
+  resetEl('lineStartSup', 'rgba(255,255,255,0.38)', '1.4', 'arrowDim');
+  resetEl('lineSupGuard', 'rgba(255,255,255,0.38)', '1.4', 'arrowDim');
+
+  ['pathOrder','pathPolicy','pathEsc','pathChat'].forEach(id =>
+    resetEl(id, 'rgba(255,255,255,0.30)', '1.3', 'arrowDim'));
+  ['nodeOrder','nodePolicy','nodeEsc','nodeChat'].forEach(id =>
+    resetEl(id, null, null, null));
+
+  resetEl('pathPolicyRag',  'rgba(20,184,166,0.30)', '1.3', 'arrowDim');
+  resetEl('pathRagRetrieve','rgba(20,184,166,0.22)', '1.2', 'arrowDim');
+  resetEl('pathKBCheck',    'rgba(20,184,166,0.22)', '1.2', 'arrowDim');
+  resetEl('pathRagDirect',  'rgba(20,184,166,0.22)', '1.2', 'arrowDim');
+
+  ['pathOrderCheck','pathChatCheck'].forEach(id =>
+    resetEl(id, 'rgba(255,255,255,0.28)', '1.3', 'arrowDim'));
+  resetEl('pathCheckEnd', 'rgba(255,255,255,0.40)', '1.4', 'arrowDim');
+
+  resetEl('nodeEnd', null, null, null);
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-async function animateRouting(intent, color, guardrailTriggered) {
+async function animateRouting(intent, color, guardrailTriggered, retrievalUsed) {
   resetRouting();
 
-  // Step 0 – START node glows, arrow animates down to Supervisor
+  // ── Step 0: START glows, arrow draws down ──
   const startNode = document.getElementById('nodeStart');
   if (startNode) {
-    startNode.style.fill        = 'rgba(255,255,255,0.28)';
-    startNode.style.stroke      = '#fff';
-    startNode.style.strokeWidth = '2.5';
-    startNode.style.filter      = 'url(#softGlow)';
+    startNode.style.fill='rgba(255,255,255,0.22)'; startNode.style.stroke='#fff';
+    startNode.style.strokeWidth='1.8'; startNode.style.filter='url(#softGlow)';
   }
-  const startLine = document.getElementById('lineStartSup');
-  if (startLine) {
-    const dx = 170 - 170, dy = 44 - 20;   // x1=170 y1=20 → x2=170 y2=44
-    const sLen = Math.sqrt(dx*dx + dy*dy);
-    startLine.style.transition       = 'none';
-    startLine.setAttribute('stroke', '#8b5cf6');
-    startLine.setAttribute('stroke-width', '2');
-    startLine.setAttribute('marker-end', 'url(#arrowPurple)');
-    startLine.style.filter           = 'url(#softGlow)';
-    startLine.style.strokeDasharray  = `${sLen}`;
-    startLine.style.strokeDashoffset = `${sLen}`;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        startLine.style.transition       = 'stroke-dashoffset 0.28s ease-in-out';
-        startLine.style.strokeDashoffset = '0';
-      });
-    });
-  }
+  animatePath('lineStartSup', '#8b5cf6', 'arrowPurple', 0.24);
   setRoutingStatus('🚀 Request received…');
-  await sleep(380);
+  await sleep(340);
 
-  // Step 1 – Memory read (both short-term and long-term) + Supervisor activates
+  // ── Step 1: Supervisor + memory reads ──
   setSupervisorActive(true);
-  setMemoryActive(true);
-  setShortTermActive(true);
+  setMemoryActive(true); setShortTermActive(true);
   setRoutingStatus('💾 Loading memory context…');
-  await sleep(260);
+  await sleep(240);
   setMemoryActive(false);
   setRoutingStatus('🔵 Reading session context…');
-  await sleep(220);
-  setShortTermActive(false);
-  setRoutingStatus('🧠 Analyzing intent…');
   await sleep(200);
+  setShortTermActive(false);
+  setRoutingStatus('🧠 Classifying intent…');
+  await sleep(180);
 
-  // Step 2 – Animate line from supervisor down to guardrails
-  const sg    = document.getElementById('lineSupGuard');
-  const sgLen = sg.getTotalLength();
-  sg.style.transition       = 'none';
-  sg.setAttribute('stroke', '#8b5cf6');
-  sg.setAttribute('stroke-width', '2');
-  sg.setAttribute('marker-end', 'url(#arrowPurple)');
-  sg.style.filter           = 'url(#softGlow)';
-  sg.style.strokeDasharray  = `${sgLen}`;
-  sg.style.strokeDashoffset = `${sgLen}`;
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      sg.style.transition       = 'stroke-dashoffset 0.25s ease-in-out';
-      sg.style.strokeDashoffset = '0';
-    });
-  });
+  // ── Step 2: Supervisor → Guardrails ──
+  animatePath('lineSupGuard', '#8b5cf6', 'arrowPurple', 0.22);
   setRoutingStatus('🛡️ Checking guardrails…');
-  await sleep(380);
+  await sleep(340);
 
-  // Step 3 – Guardrail result
+  // ── Step 3: Guardrail result ──
   if (guardrailTriggered) {
     setGuardrailState('fail');
     setRoutingStatus('🚫 Blocked by Guardrails');
     return;
   }
-
   setGuardrailState('pass');
   setRoutingStatus('✅ Guardrails passed');
-  await sleep(350);
+  await sleep(300);
 
-  // Step 4 – Route to correct agent
+  // ── Step 4: Route to specialist agent ──
   const cfg = AGENT_CFG[intent];
-  if (!cfg) { setRoutingStatus('⚠️ Unknown'); return; }
+  if (!cfg) { setRoutingStatus('⚠️ Unknown intent'); return; }
 
-  setRoutingStatus('⚡ Routing to agent…');
-  const path = document.getElementById(cfg.pathId);
-  const len  = path.getTotalLength();
-  path.style.transition       = 'none';
-  path.setAttribute('stroke', cfg.color);
-  path.setAttribute('stroke-width', '2.5');
-  path.setAttribute('marker-end', `url(#${cfg.marker})`);
-  path.style.filter           = 'url(#softGlow)';
-  path.style.strokeDasharray  = `${len}`;
-  path.style.strokeDashoffset = `${len}`;
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      path.style.transition       = 'stroke-dashoffset 0.45s ease-in-out';
-      path.style.strokeDashoffset = '0';
-    });
-  });
+  setRoutingStatus('⚡ Routing to specialist…');
+  animatePath(cfg.pathId, cfg.color, cfg.marker, 0.38);
+  launchDot(document.getElementById(cfg.pathId), cfg.color);
+  await sleep(460);
 
-  launchDot(path, cfg.color);
-  await sleep(550);
-
-  // Step 5 – Agent node lights up
+  // ── Step 5: Agent node glows ──
   const node = document.getElementById(cfg.nodeId);
-  node.style.fill        = cfg.color + '2a';
-  node.style.stroke      = cfg.color;
-  node.style.strokeWidth = '2';
-  node.style.filter      = 'url(#softGlow)';
+  if (node) {
+    node.style.fill=cfg.color+'22'; node.style.stroke=cfg.color;
+    node.style.strokeWidth='1.8'; node.style.filter='url(#softGlow)';
+  }
 
-  // Step 6 – Policy check gate (escalation bypasses it)
-  if (cfg.checkPathId) {
+  // ── Step 6a: Agentic RAG gate (policy path only) ──
+  if (cfg.ragGate) {
+    await sleep(180);
+    setRoutingStatus('🔎 RAG decision gate…');
+    animatePath('pathPolicyRag', '#14b8a6', 'arrowTeal', 0.18);
+    await sleep(260);
+
+    const retrieve = retrievalUsed !== false;   // default true if unknown
+    setRagGateActive(true, retrieve);
+    setRoutingStatus(retrieve ? '🔍 Consulting knowledge base…' : '💬 Context sufficient — skipping retrieval');
     await sleep(300);
+
+    if (retrieve) {
+      animatePath('pathRagRetrieve', '#14b8a6', 'arrowTeal', 0.34);
+      launchDot(document.getElementById('pathRagRetrieve'), '#14b8a6');
+      await sleep(380);
+      setKBActive(true);
+      setRoutingStatus('📚 Retrieving from knowledge base…');
+      await sleep(260);
+      animatePath('pathKBCheck', '#14b8a6', 'arrowTeal', 0.24);
+      await sleep(310);
+    } else {
+      animatePath('pathRagDirect', '#14b8a6', 'arrowTeal', 0.22);
+      await sleep(320);
+    }
+
     setRoutingStatus('🔍 Checking response policy…');
-    const checkPath = document.getElementById(cfg.checkPathId);
-    const cLen = checkPath.getTotalLength();
-    checkPath.style.transition       = 'none';
-    checkPath.setAttribute('stroke', cfg.color);
-    checkPath.setAttribute('stroke-width', '2');
-    checkPath.setAttribute('marker-end', `url(#${cfg.marker})`);
-    checkPath.style.filter           = 'url(#softGlow)';
-    checkPath.style.strokeDasharray  = `${cLen}`;
-    checkPath.style.strokeDashoffset = `${cLen}`;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        checkPath.style.transition       = 'stroke-dashoffset 0.35s ease-in-out';
-        checkPath.style.strokeDashoffset = '0';
-      });
-    });
-    await sleep(450);
     setPolicyCheckActive('pass');
     setRoutingStatus('✅ Policy OK — delivering response');
+    await sleep(200);
+    animatePath('pathCheckEnd', '#10b981', 'arrowGreen', 0.22);
+    await sleep(270);
+    const en = document.getElementById('nodeEnd');
+    if (en) {
+      en.style.fill='rgba(16,185,129,0.28)'; en.style.stroke='#10b981';
+      en.style.strokeWidth='1.8'; en.style.filter='url(#softGlow)';
+      setTimeout(() => { en.style.fill=''; en.style.stroke=''; en.style.strokeWidth=''; en.style.filter=''; }, 2400);
+    }
+    return;
+  }
 
-    // Animate pathCheckEnd (green arrow to END)
-    await sleep(220);
-    const endPath = document.getElementById('pathCheckEnd');
-    const eLen = endPath.getTotalLength();
-    endPath.style.transition       = 'none';
-    endPath.setAttribute('stroke', '#10b981');
-    endPath.setAttribute('stroke-width', '2');
-    endPath.setAttribute('marker-end', 'url(#arrowGreen)');
-    endPath.style.filter           = 'url(#softGlow)';
-    endPath.style.strokeDasharray  = `${eLen}`;
-    endPath.style.strokeDashoffset = `${eLen}`;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        endPath.style.transition       = 'stroke-dashoffset 0.25s ease-in-out';
-        endPath.style.strokeDashoffset = '0';
-      });
-    });
-    // Light up END node green
-    await sleep(300);
-    const endNode = document.getElementById('nodeEnd');
-    if (endNode) {
-      endNode.style.fill        = 'rgba(16,185,129,0.35)';
-      endNode.style.stroke      = '#10b981';
-      endNode.style.strokeWidth = '2.5';
-      endNode.style.filter      = 'url(#softGlow)';
-      setTimeout(() => {
-        endNode.style.fill        = '';
-        endNode.style.stroke      = '';
-        endNode.style.strokeWidth = '';
-        endNode.style.filter      = '';
-      }, 2800);
+  // ── Step 6b: Order / Chitchat → Policy Check → END ──
+  if (cfg.checkPathId) {
+    await sleep(260);
+    setRoutingStatus('🔍 Checking response policy…');
+    animatePath(cfg.checkPathId, cfg.color, cfg.marker, 0.32);
+    await sleep(400);
+    setPolicyCheckActive('pass');
+    setRoutingStatus('✅ Policy OK — delivering response');
+    await sleep(200);
+    animatePath('pathCheckEnd', '#10b981', 'arrowGreen', 0.22);
+    await sleep(270);
+    const en = document.getElementById('nodeEnd');
+    if (en) {
+      en.style.fill='rgba(16,185,129,0.28)'; en.style.stroke='#10b981';
+      en.style.strokeWidth='1.8'; en.style.filter='url(#softGlow)';
+      setTimeout(() => { en.style.fill=''; en.style.stroke=''; en.style.strokeWidth=''; en.style.filter=''; }, 2400);
     }
   }
+  // Escalation has no policy check — dot on bypass path is always visible (dim dashed)
 }
 
 function launchDot(pathEl, color) {

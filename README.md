@@ -36,7 +36,7 @@ Supervisor Node  <-- classifies intent, loads long-term memory
 
 **Order Lookup Agent** — binds two tools to the LLM: `lookup_order_by_id` and `lookup_orders_by_customer`. The LLM calls whichever tool is needed, gets real order data back, and answers from that data only. Never invents order details.
 
-**Policy Agent** — uses hybrid RAG to retrieve relevant chunks from the knowledge base (return policy, shipping policy, FAQ, product catalog), then answers the customer using only what was retrieved.
+**Policy Agent** — implements Agentic RAG: before touching the knowledge base, the agent asks an LLM decision gate whether the existing conversation context already contains a full answer. If yes, retrieval is skipped and the agent answers from context alone. If not, it runs hybrid RAG (BM25 + dense + RRF) to retrieve the relevant chunks, then answers using only what was retrieved.
 
 **Escalation Agent** — generates a structured escalation summary (customer ID, issue, urgency, recommended action) for a human support agent.
 
@@ -241,10 +241,10 @@ The system uses **hybrid retrieval** combining two methods:
 Results from both are merged using **Reciprocal Rank Fusion (RRF)**, which scores each chunk by how highly it ranked in each list. This handles both precise keyword queries ("what is the $4.99 fee") and fuzzy semantic queries ("is my broken item covered").
 
 **Naive RAG baseline scores** (dense retrieval only):
-- Faithfulness: 0.925 | Answer Relevancy: 1.000 | Context Precision: 0.967
+- Faithfulness: 0.760 | Answer Relevancy: 0.860 | Context Precision: 0.755
 
 **Hybrid RAG scores** (after improvement):
-- Faithfulness: 0.975 | Answer Relevancy: 1.000 | Context Precision: 0.950
+- Faithfulness: 0.865 | Answer Relevancy: 0.885 | Context Precision: 0.875
 
 ---
 

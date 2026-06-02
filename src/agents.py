@@ -151,27 +151,65 @@ def order_lookup_agent(state):
     }
 
 
-def policy_agent(state):
+# ── Agentic RAG — three separate nodes exposed to LangGraph ──────────────────
+
+def policy_rag_decision(state) -> dict:
+    """Node 1 of 3 — Agentic RAG gate.
+    Decides whether the knowledge base must be consulted for this turn.
+    Sets retrieval_needed in state; the graph routes accordingly.
+    """
+    messages = state["messages"]
+    last_msg = messages[-1]["content"]
+    short_term = short_term_history(messages)
+    long_term = long_term_context(state)
+
+    existing_context = "\n".join(filter(None, [long_term, short_term]))
+    if not existing_context.strip():
+        print("[Agentic RAG] No prior context — retrieval required")
+        return {"retrieval_needed": True}
+
+    decision_prompt = f"""You are a retrieval decision agent for NovaMart customer support.
+Decide whether the knowledge base must be searched to answer the customer's question,
+or whether the existing conversation context already contains a complete and accurate answer.
+
+Existing context (conversation history + customer history):
+{existing_context}
+
+Customer question: "{last_msg}"
+
+Rules:
+- Reply "retrieve" if the question requires policy details, product prices, warranties, return
+  rules, shipping fees, or any factual information NOT already stated in the context above.
+- Reply "context" ONLY if the context above already contains a full, specific, accurate answer
+  to this exact question (e.g. the agent already explained the policy this session and the
+  customer is just asking a follow-up about the same point).
+- When in doubt, reply "retrieve".
+
+Reply with ONLY one word: retrieve  or  context"""
+
+    result = llm.invoke(decision_prompt).content.strip().lower()
+    needed = not result.startswith("context")
+    print(f"[Agentic RAG] retrieval={'required' if needed else 'skipped — context sufficient'}")
+    return {"retrieval_needed": needed}
+
+
+def policy_agent_with_rag(state) -> dict:
+    """Node 2a of 3 — Policy agent that runs hybrid RAG retrieval first."""
     from rag import get_hybrid_chain
     import re
     messages = state["messages"]
     last_msg = messages[-1]["content"]
-
     short_term = short_term_history(messages)
     long_term = long_term_context(state)
+    profile = _profile_context(state)
 
-    # Enrich the RAG query with conversation context so retrieval is more accurate
-    if short_term:
-        rag_query = f"Context from conversation:\n{short_term}\n\nCustomer question: {last_msg}"
-    else:
-        rag_query = last_msg
-
-    # Use retriever directly so we can supplement for multi-product queries
+    rag_query = (
+        f"Context from conversation:\n{short_term}\n\nCustomer question: {last_msg}"
+        if short_term else last_msg
+    )
     _, hybrid_retriever = get_hybrid_chain()
     docs = hybrid_retriever(rag_query)
 
-    # When multiple products are mentioned, run a targeted query per product
-    # so no product's details get crowded out by the other
     product_names = list(dict.fromkeys(re.findall(
         r'\b(webcam|keyboard|headphones?|monitor|lamp|hub|speaker|camera|tablet|mouse)\b',
         last_msg.lower()
@@ -184,21 +222,47 @@ def policy_agent(state):
                     docs.append(doc)
                     seen.add(doc.page_content)
 
-    context = "\n\n".join(d.page_content for d in docs[:6])
+    retrieved_context = "\n\n".join(d.page_content for d in docs[:6])
 
-    # Let the LLM answer using the retrieved context
-    profile = _profile_context(state)
     prompt = f"""You are a helpful customer support agent for NovaMart.
 Use the policy information below to answer the customer's question.
 Be friendly, concise, and consistent with everything said earlier in the conversation.
 The customer should never have to repeat themselves.
-For product questions, include all relevant details from the context: price, key features, availability, and warranty.
+For product questions, include all relevant details: price, key features, availability, and warranty.
 
 {profile}
 {long_term}
 
-Policy information (retrieved):
-{context}
+Policy information (retrieved from knowledge base):
+{retrieved_context}
+
+Conversation so far this session:
+{short_term if short_term else "(this is the first message)"}
+
+Customer: {last_msg}"""
+
+    response = llm.invoke(prompt)
+    return {
+        "response": response.content,
+        "messages": [{"role": "assistant", "content": response.content}],
+    }
+
+
+def policy_agent_without_rag(state) -> dict:
+    """Node 2b of 3 — Policy agent that answers from conversation context alone (no retrieval)."""
+    messages = state["messages"]
+    last_msg = messages[-1]["content"]
+    short_term = short_term_history(messages)
+    long_term = long_term_context(state)
+    profile = _profile_context(state)
+
+    prompt = f"""You are a helpful customer support agent for NovaMart.
+Answer the customer's question using the conversation context below.
+Be friendly, concise, and consistent with everything said earlier.
+The customer should never have to repeat themselves.
+
+{profile}
+{long_term}
 
 Conversation so far this session:
 {short_term if short_term else "(this is the first message)"}
