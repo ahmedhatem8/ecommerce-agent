@@ -1,9 +1,9 @@
 {
   "run_name": "Baseline RAG (Dense Retrieval Only)",
-  "timestamp": "2026-06-01T20:03:33.688336",
+  "timestamp": "2026-06-02T12:40:46.477149",
   "summary": {
-    "faithfulness": 0.74,
-    "answer_relevancy": 0.845,
+    "faithfulness": 0.76,
+    "answer_relevancy": 0.86,
     "context_precision": 0.755,
     "total_questions": 20
   },
@@ -22,8 +22,8 @@
     },
     "very_hard": {
       "n": 7,
-      "faithfulness": 0.657,
-      "answer_relevancy": 0.757,
+      "faithfulness": 0.714,
+      "answer_relevancy": 0.8,
       "context_precision": 0.714
     }
   },
@@ -45,7 +45,7 @@
       "topic": "shipping",
       "question": "How long does standard shipping take and how much does it cost for orders below $50?",
       "ground_truth": "Standard shipping takes 5 to 7 business days and costs $4.99 for orders below $50.",
-      "answer": "For standard shipping, the delivery time is 5-7 business days. The standard shipping fee for orders below $50 is $4.99. However, if your order is above $50, you will receive free standard shipping.",
+      "answer": "For standard shipping, the delivery time is 5-7 business days. The cost for standard shipping on orders below $50 is $4.99. However, if your order is above $50, you will receive free standard shipping.",
       "faithfulness": 1.0,
       "answer_relevancy": 1.0,
       "context_precision": 1.0
@@ -100,7 +100,7 @@
       "topic": "returns",
       "question": "I received the wrong item 40 days after delivery. Can I still get a refund even though the 30-day window has passed?",
       "ground_truth": "Yes. Wrong item exceptions grant a full refund or replacement with no return needed. The 30-day window does not apply.",
-      "answer": "I'm happy to help you with your concern. According to our return policy, items may be returned within 30 days of delivery. Since you received the wrong item 40 days after delivery, you are outside of the eligible return window. Unfortunately, this means you do not qualify for a refund based on our standard return policy. However, I'd be happy to discuss possible alternatives or exceptions with you. Could you please provide more details about your order and the issue you're experiencing?",
+      "answer": "I'm happy to help you with your concern. According to our return policy, items may be returned within 30 days of delivery. Since you've received the wrong item 40 days after delivery, you're outside of the eligible return window. Unfortunately, this means you won't be able to get a refund. However, I'd be happy to help you explore other options or provide more information on our return policy if you have any further questions.",
       "faithfulness": 0.0,
       "answer_relevancy": 0.8,
       "context_precision": 0.0
@@ -166,7 +166,7 @@
       "topic": "returns",
       "question": "How many business days does it take to receive my refund after NovaMart gets the returned item?",
       "ground_truth": "The refund is issued within 5 business days of NovaMart receiving the returned item.",
-      "answer": "I'm not able to find that information in our return policy. The provided context only discusses the eligibility and process for refunds, but it does not specify the number of business days it takes to receive a refund after NovaMart gets the returned item. If you have any other questions about our return policy, I'd be happy to help.",
+      "answer": "I'm happy to help you with your question. However, the provided context does not mention the number of business days it takes to receive a refund after NovaMart gets the returned item. It only outlines the eligibility criteria for returns and the refund process based on the refund amount. If you'd like more information, I can try to find additional details or guide you through the process.",
       "faithfulness": 0.8,
       "answer_relevancy": 0.0,
       "context_precision": 0.0
@@ -177,7 +177,7 @@
       "topic": "multi-policy",
       "question": "If I order a USB-C Hub and a Desk Lamp together, will I get free shipping? Show the calculation.",
       "ground_truth": "Yes. USB-C Hub is $34.99 and Desk Lamp is $29.99, totalling $64.98 which exceeds the $50 free shipping threshold.",
-      "answer": "To determine if you'll get free shipping, let's calculate the total cost of your order.\n\nThe price of the USB-C Hub 7-in-1 is $34.99, and the price of the Desk Lamp LED is $29.99. \n\nTotal cost = Price of USB-C Hub + Price of Desk Lamp LED\nTotal cost = $34.99 + $29.99\nTotal cost = $64.98\n\nSince your total order is above $50, you will qualify for free standard shipping.",
+      "answer": "To determine if you'll get free shipping, let's calculate the total cost of your order.\n\nThe price of the USB-C Hub 7-in-1 is $34.99, and the price of the Desk Lamp LED is $29.99. \n\nTotal cost = $34.99 (USB-C Hub) + $29.99 (Desk Lamp) = $64.98\n\nSince your total order is above $50, you will qualify for free standard shipping.",
       "faithfulness": 1.0,
       "answer_relevancy": 1.0,
       "context_precision": 1.0
@@ -188,7 +188,7 @@
       "topic": "multi-policy",
       "question": "My Mechanical Keyboard stopped working after 8 months. Is it still under warranty, and what exactly should I do?",
       "ground_truth": "Yes. The Mechanical Keyboard has a 1-year manufacturer warranty so 8 months is within coverage. Contact support with your order ID to initiate a warranty claim.",
-      "answer": "I'm so sorry to hear that your Mechanical Keyboard stopped working. According to our product catalog, the Mechanical Keyboard carries a 1-year manufacturer warranty. Since it stopped working after 8 months, it is still under warranty.\n\nTo proceed with the warranty claim, I recommend contacting our manufacturer's support team directly. They will guide you through the process of repairing or replacing your Mechanical Keyboard. Please have your purchase receipt and the keyboard's serial number ready when you contact them.\n\nIf you need any further assistance or have any questions, feel free to ask, and I'll be happy to help.",
+      "answer": "I'm so sorry to hear that your Mechanical Keyboard stopped working. According to our warranty policy, the Mechanical Keyboard carries a 1-year manufacturer warranty. Since it stopped working after 8 months, it is still under warranty.\n\nTo proceed with the warranty claim, I recommend contacting our customer support team (that's me) and providing the order number or proof of purchase. We'll be happy to assist you with the warranty claim process and provide further instructions on how to get your Mechanical Keyboard repaired or replaced.",
       "faithfulness": 0.0,
       "answer_relevancy": 1.0,
       "context_precision": 0.8
@@ -199,7 +199,7 @@
       "topic": "products",
       "question": "How much does the Bluetooth Speaker cost in your catalog?",
       "ground_truth": "NovaMart does not sell a Bluetooth Speaker. The catalog includes Wireless Headphones, Phone Case, USB-C Hub, Laptop Stand, Mechanical Keyboard, Webcam HD, Desk Lamp, and Monitor 27 inch.",
-      "answer": "I couldn't find any information about a Bluetooth Speaker in our catalog. The available products related to audio are the Wireless Headphones, which cost $89.99. If you have any other questions or need more information, feel free to ask.",
+      "answer": "I couldn't find any information about a Bluetooth Speaker in our catalog. The available products related to audio are the Wireless Headphones, which cost $89.99. If you have any other questions or need help with something else, feel free to ask.",
       "faithfulness": 0.8,
       "answer_relevancy": 0.2,
       "context_precision": 0.0
@@ -210,7 +210,7 @@
       "topic": "multi-policy",
       "question": "I am only buying a Phone Case for $14.99. How much will standard shipping cost me?",
       "ground_truth": "Since $14.99 is below the $50 free shipping threshold, standard shipping will cost $4.99.",
-      "answer": "Since your order is below $50, the standard shipping fee will be $4.99. So, the total cost for your Phone Case, including standard shipping, will be $14.99 (item price) + $4.99 (shipping fee) = $19.98.",
+      "answer": "Since your order is below $50, the standard shipping fee is $4.99. So, the total cost for your Phone Case, including standard shipping, would be $14.99 (Phone Case) + $4.99 (standard shipping) = $19.98.",
       "faithfulness": 1.0,
       "answer_relevancy": 0.8,
       "context_precision": 1.0
@@ -221,9 +221,9 @@
       "topic": "multi-policy",
       "question": "My order was delayed by 4 days and I also want to return it within the window. Can I get both the $5 store credit and a full refund?",
       "ground_truth": "Yes. The $5 delay credit is issued automatically for delays over 3 days. You can separately initiate a return for a refund within 30 days of delivery.",
-      "answer": "I'm happy to help you with your concern. According to our shipping policy, if your order is delayed beyond the estimated date, you are eligible for a $5 store credit if the delay is over 3 days. Since your order was delayed by 4 days, you will automatically receive the $5 store credit.\n\nRegarding the return, I'd be happy to assist you with the process. However, please note that our policy on returns and refunds is not specified in the information provided. I recommend contacting our support team with your order ID, and we'll be happy to guide you through the return process and inform you about any potential refund. We will investigate and provide an update within 12 hours.",
-      "faithfulness": 0.0,
-      "answer_relevancy": 0.5,
+      "answer": "According to our shipping policy, if your order is delayed beyond the estimated date by more than 3 days, you are eligible for a $5 store credit, which will be issued automatically. However, the policy documents provided do not mention anything about returning a delayed order or combining the store credit with a full refund. To get a full refund, you would need to initiate the return process, but I would recommend contacting our support team with your order ID to discuss your specific situation and see what options are available to you.",
+      "faithfulness": 0.4,
+      "answer_relevancy": 0.8,
       "context_precision": 0.4
     },
     {
@@ -243,7 +243,7 @@
       "topic": "orders",
       "question": "I placed an order 90 minutes ago. Can I still change it? And if I want to cancel, is that possible?",
       "ground_truth": "No — order changes are only allowed within 1 hour. Cancellation is still possible if the order has not yet been dispatched.",
-      "answer": "According to our policy, you can change your order within 1 hour of placing it. Since you placed your order 90 minutes ago, it's no longer possible to make changes.\n\nAs for cancellation, it's possible if the order is not yet dispatched. If your order has not been dispatched, you can cancel it. However, if it's already in transit, cancellation is not possible. I recommend contacting our support team with your order ID to check the status and proceed with cancellation if it's still eligible.",
+      "answer": "According to our policy, you can change your order within 1 hour of placing it. Since you placed your order 90 minutes ago, it's unlikely that we can make any changes to it.\n\nAs for cancellation, it's possible if the order is not yet dispatched. If the order is still being processed and has not been shipped, we may be able to cancel it for you. However, if the order is already in transit, cancellation is not possible.\n\nI recommend contacting our support team with your order ID to check the status of your order and see what options are available to you. We'll do our best to assist you.",
       "faithfulness": 0.8,
       "answer_relevancy": 0.8,
       "context_precision": 0.8
