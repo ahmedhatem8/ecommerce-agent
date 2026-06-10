@@ -6,7 +6,7 @@ from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, Tool
 from memory import long_term_context, short_term_history
 
 load_dotenv()
-
+#test#
 llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
 llm_friendly = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.4)
 
