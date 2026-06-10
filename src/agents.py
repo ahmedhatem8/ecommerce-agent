@@ -8,6 +8,7 @@ from memory import long_term_context, short_term_history
 load_dotenv()
 
 llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
+llm_friendly = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.4)
 
 def load_orders():
     with open("data/orders.json", "r", encoding="utf-8") as f:
@@ -130,16 +131,24 @@ def order_lookup_agent(state):
         tool_results_text = "\n\n".join(
             m.content for m in lc_messages if isinstance(m, ToolMessage)
         )
+        customer_name = state.get("customer_profile", {}).get("customer_name", "")
+        first_name = customer_name.split()[0] if customer_name else ""
+        name_instruction = (
+            f"Address the customer by their first name ({first_name}) naturally in your reply.\n"
+            if first_name else ""
+        )
         summary_prompt = (
-            "You are a customer support agent for NovaMart.\n"
+            "You are a warm, friendly customer support agent for NovaMart.\n"
+            f"{name_instruction}"
             "Answer the customer's question using ONLY the exact order data below. "
             "Do NOT add, invent, or reference any order IDs, items, or prices not listed here.\n"
-            "Always include the order ID(s) in your response so the customer knows exactly which order you mean.\n\n"
+            "Always include the order ID(s) so the customer knows which order you mean. "
+            "Keep your tone natural and varied — don't start every response the same way.\n\n"
             f"Verified order data from system:\n{tool_results_text}\n\n"
             f"Customer question: {last_msg}\n\n"
             "Friendly, concise answer:"
         )
-        final_msg = llm.invoke(summary_prompt)
+        final_msg = llm_friendly.invoke(summary_prompt)
         response_text = final_msg.content
     else:
         # LLM answered directly without needing a tool call

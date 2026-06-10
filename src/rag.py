@@ -14,15 +14,25 @@ load_dotenv()
 
 CHROMA_PATH = "knowledge_base/chroma_db"
 POLICIES_DIR = "data/policies"
+KNOWLEDGE_BASE_DIR = "data/knowledge_base"
 
 def load_documents():
     docs = []
-    for fname in os.listdir(POLICIES_DIR):
-        if fname.endswith(".md"):
-            fpath = os.path.join(POLICIES_DIR, fname)
-            with open(fpath, "r", encoding="utf-8") as f:
-                text = f.read()
-            docs.append(Document(page_content=text, metadata={"source": fname}))
+    for directory, label in [
+        (POLICIES_DIR, "policies"),
+        (KNOWLEDGE_BASE_DIR, "knowledge_base"),
+    ]:
+        if not os.path.isdir(directory):
+            continue
+        for fname in sorted(os.listdir(directory)):
+            if fname.endswith(".md"):
+                fpath = os.path.join(directory, fname)
+                with open(fpath, "r", encoding="utf-8") as f:
+                    text = f.read()
+                docs.append(Document(
+                    page_content=text,
+                    metadata={"source": fname, "directory": label},
+                ))
     return docs
 
 def get_embeddings():

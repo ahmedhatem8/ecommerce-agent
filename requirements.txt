@@ -9,3 +9,5 @@ faker
 python-dotenv
 rank-bm25
 datasets
+huggingface_hub
+pandas

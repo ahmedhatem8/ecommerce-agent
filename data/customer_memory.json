@@ -14,7 +14,7 @@
     "last_seen": "2026-06-01"
   },
   "CUST-115": {
-    "total_sessions": 5,
+    "total_sessions": 6,
     "past_orders": [
       "ORD-1001",
       "ORD-1032",
@@ -25,15 +25,17 @@
       "ORD-1186"
     ],
     "stated_preferences": [],
-    "unresolved_complaints": [],
+    "unresolved_complaints": [
+      "unable to return ORD-1032 due to expired return window"
+    ],
     "session_summaries": [
-      "The customer inquired about their past orders and the agent provided information about their most recent order, resolving the inquiry.",
       "Session completed.",
       "Session completed.",
       "The customer inquired about their last question and orders, and the agent provided a summary of their 7 orders, but it is unclear if the customer's issues were fully resolved.",
-      "Session completed."
+      "Session completed.",
+      "The customer inquired about their orders, refund policy, and attempted to return order ORD-1032, but the issue was not resolved due to the return window having passed."
     ],
     "escalations": 0,
-    "last_seen": "2026-06-01"
+    "last_seen": "2026-06-10"
   }
 }
